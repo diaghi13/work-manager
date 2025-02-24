@@ -17,7 +17,7 @@ class MonthlyInvoicesChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Invoices 2025',
+                    'label' => 'Invoices 2025!',
 //                    'data' => Document::whereYear('document_date', 2025)
 //                        ->where('type', 'invoice')
 //                        ->where('status', '!=', 'draft')
