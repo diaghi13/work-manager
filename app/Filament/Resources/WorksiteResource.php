@@ -61,23 +61,18 @@ class WorksiteResource extends Resource
                     ->schema([
                         Forms\Components\TextInput::make('location')
                             ->maxLength(255)
-                            //->hidden(fn(Forms\Get $get) => $get('type') === WorksiteTypeEnum::TOUR)
-                            ->hidden(fn(Forms\Get $get): bool => $get('type') === WorksiteTypeEnum::TOUR->value)
                             ->reactive()
                             ->columnSpanFull(),
                         Forms\Components\Group::make()
                             ->schema([
                                 Forms\Components\TextInput::make('address')
                                     ->maxLength(255)
-                                    ->hidden(fn(Forms\Get $get) => $get('type') === WorksiteTypeEnum::TOUR->value)
                                     ->columnSpan(4),
                                 Forms\Components\TextInput::make('number')
                                     ->maxLength(255)
-                                    ->hidden(fn(Forms\Get $get) => $get('type') === WorksiteTypeEnum::TOUR->value)
                                     ->columnSpan(1),
                                 Forms\Components\TextInput::make('zip_code')
                                     ->maxLength(255)
-                                    ->hidden(fn(Forms\Get $get) => $get('type') === WorksiteTypeEnum::TOUR->value)
                                     ->columnSpan(1),
                             ])
                             ->columnSpanFull()
@@ -86,15 +81,12 @@ class WorksiteResource extends Resource
                             ->schema([
                                 Forms\Components\TextInput::make('city')
                                     ->maxLength(255)
-                                    ->hidden(fn(Forms\Get $get) => $get('type') === WorksiteTypeEnum::TOUR->value)
                                     ->columnSpan(3),
                                 Forms\Components\TextInput::make('province')
                                     ->maxLength(255)
-                                    ->hidden(fn(Forms\Get $get) => $get('type') === WorksiteTypeEnum::TOUR->value)
                                     ->columnSpan(1),
                                 Forms\Components\TextInput::make('country')
                                     ->maxLength(255)
-                                    ->hidden(fn(Forms\Get $get) => $get('type') === WorksiteTypeEnum::TOUR->value)
                                     ->columnSpan(2),
                             ])
                             ->columnSpanFull()
@@ -102,7 +94,10 @@ class WorksiteResource extends Resource
 
                     ])
                     ->columns(2)
-                    ->hidden(fn(Forms\Get $get) => $get('type') === WorksiteTypeEnum::TOUR->value),
+                    ->hidden(fn(Forms\Get $get) => is_string($get('type'))
+                        ? $get('type') === WorksiteTypeEnum::TOUR->value
+                        : $get('type')?->value === WorksiteTypeEnum::TOUR->value
+                    ),
                 Forms\Components\Fieldset::make(__('app.payment_conditions'))
                     ->schema([
                         Forms\Components\TextInput::make('daily_cost'),
