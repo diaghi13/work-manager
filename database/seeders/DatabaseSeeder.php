@@ -21,9 +21,9 @@ class DatabaseSeeder extends Seeder
 //        ]);
 
         $this->call([
-            PaymentMethodSeeder::class,
-            VatSeeder::class,
-            MeasureUnitSeeder::class,
+            //PaymentMethodSeeder::class,
+            //VatSeeder::class,
+            //MeasureUnitSeeder::class,
         ]);
     }
 }
