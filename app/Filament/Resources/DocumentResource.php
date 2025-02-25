@@ -25,6 +25,7 @@ use Hamcrest\Core\Set;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class DocumentResource extends Resource
 {
@@ -128,7 +129,9 @@ class DocumentResource extends Resource
                     ])
                     ->schema([
                         Forms\Components\Select::make('products')
-                            ->options(['Cantieri' => Worksite::all()->pluck('name', 'id')->toArray()]),
+                            ->options([
+                                'Cantieri' => collect(DB::select('SELECT * FROM worksites LEFT JOIN (SELECT worksite_id, MAX(worksite_payment_status) as worksite_payment_status FROM document_worksite GROUP BY worksite_id) a_max ON a_max.worksite_id = worksites.id WHERE worksite_payment_status <> 3 OR worksite_payment_status IS NULL'))->pluck('name', 'id')->toArray()
+                            ]),
                         Forms\Components\Textarea::make('description')
                             ->rows(1)
                             ->autosize()

@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Enums\WorksitePaymentStatusEnum;
 use App\Models\Enums\WorksiteStatusEnum;
 use App\Models\Enums\WorksiteTypeEnum;
 use App\Observers\WorksiteObserver;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Worksite extends Model
@@ -57,6 +59,11 @@ class Worksite extends Model
     public function documents()
     {
         return $this->belongsToMany(Document::class);
+    }
+
+    public function not_payed()
+    {
+        return $this->hasMany(DocumentWorksite::class)->whereNotExists()->dd();
     }
 
     public function document_row()
