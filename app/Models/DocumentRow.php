@@ -56,7 +56,7 @@ class DocumentRow extends Model
         );
     }
 
-    protected function gross_price(): Attribute
+    protected function grossPrice(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => $value / 100,
