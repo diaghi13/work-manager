@@ -24,14 +24,6 @@ class DocumentRow extends Model
         'notes',
     ];
 
-    protected function quantity(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
-        );
-    }
-
     protected function netPrice(): Attribute
     {
         return Attribute::make(

@@ -146,13 +146,13 @@ class DocumentResource extends Resource
                             ->autosize()
                             ->columnSpan(8)
                             ->required(),
-                        Forms\Components\TextInput::make('quantity')
-                            ->columnSpan(2)
-                            ->required(),
                         Forms\Components\Select::make('measure_unit_id')
                             ->relationship(name: 'measure_unit', titleAttribute: 'abbreviation')
                             ->default(1)
                             ->native(false)
+                            ->columnSpan(2)
+                            ->required(),
+                        Forms\Components\TextInput::make('quantity')
                             ->columnSpan(2)
                             ->required(),
                         Forms\Components\TextInput::make('net_price')
