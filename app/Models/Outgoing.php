@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Enums\OutgoingTypeEnum;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
 class Outgoing extends Model
@@ -21,6 +22,14 @@ class Outgoing extends Model
         'attachments' => 'array',
         'original_filenames' => 'array',
     ];
+
+    protected function amount(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value / 100,
+            set: fn ($value) => $value * 100
+        );
+    }
 
     public function work_day()
     {

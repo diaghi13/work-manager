@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Enums\OutgoingTypeEnum;
 use App\Observers\WorkDayObserver;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
 class WorkDay extends Model
@@ -46,6 +47,46 @@ class WorkDay extends Model
 //        'total_remuneration',
 //        'total_extra_cost',
     ];
+
+    protected function extraTimeCost(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value / 100,
+            set: fn ($value) => $value * 100
+        );
+    }
+
+    protected function dailyCost(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value / 100,
+            set: fn ($value) => $value * 100
+        );
+    }
+
+    protected function totalRemuneration(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value / 100,
+            set: fn ($value) => $value * 100
+        );
+    }
+
+    protected function totalExtraCost(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value / 100,
+            set: fn ($value) => $value * 100
+        );
+    }
+
+    protected function dailyAllowance(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value / 100,
+            set: fn ($value) => $value * 100
+        );
+    }
 
     public static function boot()
     {
