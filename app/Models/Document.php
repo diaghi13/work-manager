@@ -28,7 +28,7 @@ class Document extends Model
         'status' => DocumentStatusEnum::class,
     ];
 
-    protected function net_price(): Attribute
+    protected function netPrice(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => $value / 100,
@@ -36,7 +36,7 @@ class Document extends Model
         );
     }
 
-    protected function vat_price(): Attribute
+    protected function vatPrice(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => $value / 100,
@@ -44,7 +44,7 @@ class Document extends Model
         );
     }
 
-    protected function gross_price(): Attribute
+    protected function grossPrice(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => $value / 100,

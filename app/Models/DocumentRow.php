@@ -32,7 +32,7 @@ class DocumentRow extends Model
         );
     }
 
-    protected function net_price(): Attribute
+    protected function netPrice(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => $value / 100,
@@ -40,7 +40,7 @@ class DocumentRow extends Model
         );
     }
 
-    protected function vat_price(): Attribute
+    protected function vatPrice(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => $value / 100,
@@ -48,7 +48,7 @@ class DocumentRow extends Model
         );
     }
 
-    protected function total_price(): Attribute
+    protected function totalPrice(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => $value / 100,
