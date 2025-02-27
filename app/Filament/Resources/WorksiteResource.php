@@ -4,25 +4,40 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\WorksiteResource\Pages;
 use App\Filament\Resources\WorksiteResource\RelationManagers;
+use App\Helpers\DeviceHelper;
 use App\Models\Customer;
 use App\Models\Enums\WorksiteStatusEnum;
 use App\Models\Enums\WorksiteTypeEnum;
 use App\Models\Worksite;
+use Filament\Actions\ReplicateAction;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Hydrat\TableLayoutToggle\Concerns\HasToggleableTable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class WorksiteResource extends Resource
 {
+    use HasToggleableTable;
+
     protected static ?string $model = Worksite::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-map-pin';
 
     protected static ?string $navigationGroup = 'Work';
+
+    public static function getRecordSubNavigation(\Filament\Resources\Pages\Page $page): array
+    {
+        return $page->generateNavigationItems([
+            Pages\ViewWorksite::class,
+            Pages\EditWorksite::class,
+        ]);
+    }
 
     public static function form(Form $form): Form
     {
@@ -111,6 +126,8 @@ class WorksiteResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $livewire = $table->getLivewire();
+
         return $table
             ->modifyQueryUsing(function (Builder $query) {
                 $query->with([
@@ -120,7 +137,124 @@ class WorksiteResource extends Resource
                     ]
                 ]);
             })
-            ->columns([
+            ->columns(
+                DeviceHelper::isMobile()
+                    ? static::getGridTableColumns()
+                    : static::getListTableColumns()
+            )
+            ->defaultSort('start_date', 'desc')
+            ->filters([
+                //
+            ])
+            ->actions([
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\ReplicateAction::make(),
+                Tables\Actions\EditAction::make(),
+            ])
+            ->bulkActions([
+//                Tables\Actions\BulkActionGroup::make([
+//                    Tables\Actions\DeleteBulkAction::make(),
+//                ]),
+            ]);
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                TextEntry::make('name'),
+            ]);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            RelationManagers\WorkDaysRelationManager::class,
+        ];
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListWorksites::route('/'),
+            'show' => Pages\ViewWorksite::route('/{record}'),
+            'create' => Pages\CreateWorksite::route('/create'),
+            'edit' => Pages\EditWorksite::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getListTableColumns(): array
+    {
+        return [
+            Tables\Columns\TextColumn::make('name')
+                ->searchable(),
+            Tables\Columns\TextColumn::make('type')
+                ->badge()
+                ->color(fn(Worksite $worksite): string => match ($worksite->type) {
+                    WorksiteTypeEnum::TECHNICIAN => 'primary',
+                    WorksiteTypeEnum::TOUR => 'info',
+                    WorksiteTypeEnum::SERVICE => 'success',
+                })
+                ->grow(false)
+                ->extraAttributes([
+                    'style' => 'min-width: 100px;',
+                ])
+                ->sortable()
+                ->toggleable()
+                ->searchable(),
+            Tables\Columns\TextColumn::make('location')
+                ->grow(false)
+                ->extraAttributes([
+                    'style' => 'min-width: 200px;',
+                ])
+                ->searchable(),
+            Tables\Columns\TextColumn::make('start_date')
+                ->date('d/m/y')
+                ->grow(false)
+                ->sortable(),
+            Tables\Columns\TextColumn::make('end_date')
+                ->date('d/m/y')
+                ->grow(false)
+                ->sortable(),
+            Tables\Columns\TextColumn::make('status')
+                ->badge()
+                ->color(fn(Worksite $worksite): string => match ($worksite->status) {
+                    WorksiteStatusEnum::COMPLETED, WorksiteStatusEnum::ACCEPTED => 'success',
+                    WorksiteStatusEnum::REJECTED, WorksiteStatusEnum::CANCELLED => 'danger',
+                    WorksiteStatusEnum::IN_PROGRESS => 'warning',
+                    default => 'info',
+                })
+                ->grow(false)
+                ->extraAttributes([
+                    'style' => 'min-width: 100px;',
+                ])
+                ->sortable()
+                ->toggleable()
+                ->searchable(),
+            Tables\Columns\TextColumn::make('total_remuneration')
+                ->money('EUR')
+                ->sortable(),
+            Tables\Columns\TextColumn::make('total_extra_cost')
+                ->money('EUR')
+                ->sortable(),
+            Tables\Columns\TextColumn::make('full_address'),
+            Tables\Columns\TextColumn::make('created_at')
+                ->dateTime()
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
+            Tables\Columns\TextColumn::make('updated_at')
+                ->dateTime()
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
+            Tables\Columns\TextColumn::make('customer.name')
+                ->sortable(),
+        ];
+    }
+
+    public static function getGridTableColumns(): array
+    {
+        return [
+            Tables\Columns\Layout\Split::make([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('type')
@@ -130,16 +264,26 @@ class WorksiteResource extends Resource
                         WorksiteTypeEnum::TOUR => 'info',
                         WorksiteTypeEnum::SERVICE => 'success',
                     })
+                    ->grow(false)
+                    ->extraAttributes([
+                        'style' => 'min-width: 100px;',
+                    ])
                     ->sortable()
                     ->toggleable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('location')
+                    ->grow(false)
+                    ->extraAttributes([
+                        'style' => 'min-width: 200px;',
+                    ])
                     ->searchable(),
                 Tables\Columns\TextColumn::make('start_date')
                     ->date('d/m/y')
+                    ->grow(false)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('end_date')
                     ->date('d/m/y')
+                    ->grow(false)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
@@ -149,9 +293,16 @@ class WorksiteResource extends Resource
                         WorksiteStatusEnum::IN_PROGRESS => 'warning',
                         default => 'info',
                     })
+                    ->grow(false)
+                    ->extraAttributes([
+                        'style' => 'min-width: 100px;',
+                    ])
                     ->sortable()
                     ->toggleable()
                     ->searchable(),
+            ])
+                ->from('md'),
+            Tables\Columns\Layout\Panel::make([
                 Tables\Columns\TextColumn::make('total_remuneration')
                     ->money('EUR')
                     ->sortable(),
@@ -169,34 +320,14 @@ class WorksiteResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('customer.name')
                     ->sortable(),
-            ])
-            ->defaultSort('start_date', 'desc')
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            RelationManagers\WorkDaysRelationManager::class,
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListWorksites::route('/'),
-            'create' => Pages\CreateWorksite::route('/create'),
-            'edit' => Pages\EditWorksite::route('/{record}/edit'),
+                Tables\Columns\TextColumn::make('daily_cost')
+                    ->money('EUR'),
+                Tables\Columns\TextColumn::make('extra_time_cost')
+                    ->money('EUR'),
+                Tables\Columns\TextColumn::make('daily_hours'),
+                Tables\Columns\TextColumn::make('daily_allowance')
+                    ->money('EUR'),
+            ])->collapsible(),
         ];
     }
 }

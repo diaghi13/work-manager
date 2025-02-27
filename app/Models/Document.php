@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Enums\DocumentStatusEnum;
 use App\Models\Enums\DocumentTypeEnum;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
 class Document extends Model
@@ -26,6 +27,30 @@ class Document extends Model
         'document_date' => 'date',
         'status' => DocumentStatusEnum::class,
     ];
+
+    protected function totalNet(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value / 100,
+            set: fn ($value) => $value * 100
+        );
+    }
+
+    protected function totalVat(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value / 100,
+            set: fn ($value) => $value * 100
+        );
+    }
+
+    protected function total(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value / 100,
+            set: fn ($value) => $value * 100
+        );
+    }
 
     public function customer()
     {

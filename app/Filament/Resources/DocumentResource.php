@@ -4,6 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\DocumentResource\Pages;
 use App\Filament\Resources\DocumentResource\RelationManagers;
+use App\Livewire\CustomerWorksiteComponent;
+use App\Models\Customer;
 use App\Models\Document;
 use App\Models\DocumentWorksite;
 use App\Models\Enums\DocumentStatusEnum;
@@ -13,6 +15,7 @@ use App\Models\Enums\WorksiteStatusEnum;
 use App\Models\PaymentMethod;
 use App\Models\Vat;
 use App\Models\Worksite;
+use App\Services\DocumentRowService;
 use Awcodes\TableRepeater\Components\TableRepeater;
 use Awcodes\TableRepeater\Header;
 use Brick\Money\Money;
@@ -78,10 +81,13 @@ class DocumentResource extends Resource
                                                     Forms\Components\TextInput::make('daily_hours'),
                                                 ];
                                             })
+                                            ->live()
                                             ->required(),
-                                        Forms\Components\View::make('test')
-                                            ->view('components.test')
-                                            ->columnSpan(1),
+                                        Forms\Components\Livewire::make(
+                                            CustomerWorksiteComponent::class,
+                                            fn(Forms\Get $get) => ['customer' => Customer::find($get('customer_id'))]
+                                        )
+                                        ->hidden(fn(Forms\Get $get) => !$get('customer_id'))
                                     ]),
                                 Forms\Components\Group::make()
                                     ->schema([
@@ -89,16 +95,19 @@ class DocumentResource extends Resource
                                             ->options(DocumentStatusEnum::class)
                                             ->required(),
                                         Forms\Components\TextInput::make('total_net')
+                                            ->currencyMask(thousandSeparator: '.', decimalSeparator: ',')
                                             ->default(0)
                                             //->disabled()
                                             ->inlineLabel()
                                             ->columnSpan(1),
                                         Forms\Components\TextInput::make('total_vat')
+                                            ->currencyMask(thousandSeparator: '.', decimalSeparator: ',')
                                             ->default(0)
                                             //->disabled()
                                             ->inlineLabel()
                                             ->columnSpan(1),
                                         Forms\Components\TextInput::make('total')
+                                            ->currencyMask(thousandSeparator: '.', decimalSeparator: ',')
                                             ->default(0)
                                             //->disabled()
                                             ->inlineLabel()
@@ -112,7 +121,7 @@ class DocumentResource extends Resource
                     ->label('Righe')
                     ->headers([
                         Header::make('Products')
-                        ->width('120px'),
+                            ->width('120px'),
                         Header::make('Description'),
                         Header::make('UM')
                             ->width('80px'),
@@ -137,22 +146,31 @@ class DocumentResource extends Resource
                             ->autosize()
                             ->columnSpan(8)
                             ->required(),
+                        Forms\Components\TextInput::make('quantity')
+                            ->columnSpan(2)
+                            ->required(),
                         Forms\Components\Select::make('measure_unit_id')
                             ->relationship(name: 'measure_unit', titleAttribute: 'abbreviation')
                             ->default(1)
                             ->native(false)
                             ->columnSpan(2)
                             ->required(),
-                        Forms\Components\TextInput::make('quantity')
-                            ->columnSpan(2)
-                            ->required(),
                         Forms\Components\TextInput::make('price')
+                            ->currencyMask(thousandSeparator: '.', decimalSeparator: ',')
                             ->columnSpan(2)
                             ->afterStateUpdated(function ($state, Forms\Get $get, Forms\Set $set) {
-                                $vat = Vat::find($get('vat_id'));
-                                $vatPrice = $state * $vat->value / 100;
-                                $set('vat', $vatPrice);
-                                $set('total', $state + $vatPrice);
+                                //$vat = Vat::find($get('vat_id'));
+
+                                //$money = Money::of(str_replace(',', '.', str_replace('.', '', $state)), 'EUR');
+                                //$total = $money->multipliedBy($get('quantity'));
+
+                                //$totals = DocumentRowService::calculateTotals($state, $vat->value, $get('quantity'));
+
+                                //$price = (int)str_replace(',', '.', $state);
+                                //$vatPrice = $price * $vat->value / 100;
+                                //$set('vat', $totals['total_vat']);
+                                //$set('total', $total->formatTo('it_IT'));
+                                $set('total', $state * $get('quantity'));
                             })
                             ->live(onBlur: true)
                             ->required(),
@@ -172,15 +190,17 @@ class DocumentResource extends Resource
                             ->default(1)
                             ->columnSpan(2)
                             ->required(),
-                        Forms\Components\TextInput::make('vat')
-                            ->columnSpan(2)
-                            ->required(),
+//                        MoneyInput::make('vat')
+//                            ->symbolPlacement('hidden')
+//                            ->columnSpan(2)
+//                            ->required(),
                         Forms\Components\TextInput::make('total')
+                            ->currencyMask(thousandSeparator: '.', decimalSeparator: ',')
                             ->columnSpan(2)
                             ->required(),
                     ])
                     ->relationship('document_rows')
-        ->afterStateUpdated(function ($state, Forms\Get $get, Forms\Set $set) {
+                    ->afterStateUpdated(function ($state, Forms\Get $get, Forms\Set $set) {
 //                        $total_net = 0;
 //                        $total_vat = 0;
 //                        $total = 0;
@@ -192,30 +212,30 @@ class DocumentResource extends Resource
 //                        $set('total_net', $total_net);
 //                        $set('total_vat', $total_vat);
 //                        $set('total', $total);
-        })
-        ->extraItemActions([
-            Forms\Components\Actions\Action::make('save')
-                ->label('Salva')
-                ->action(function (array $arguments, Forms\Components\Repeater $component, Forms\Set $set): void {
-                    $total_net = 0;
-                    $total_vat = 0;
-                    $total = 0;
-                    foreach ($component->getState() as $row) {
-                        $total_net += $row['price'];
-                        $total_vat += $row['vat'];
-                        $total += $row['total'];
-                    }
-                    $set('total_net', $total_net);
-                    $set('total_vat', $total_vat);
-                    $set('total', $total);
-                })
-                ->button(),
-        ])
-        ->columns(12)
-        ->orderColumn('order')
-        ->collapsible()
-        ->cloneable()
-        ->columnSpanFull(),
+                    })
+                    ->extraItemActions([
+                        Forms\Components\Actions\Action::make('save')
+                            ->label('Salva')
+                            ->action(function (array $arguments, Forms\Components\Repeater $component, Forms\Set $set): void {
+                                $total_net = 0;
+                                $total_vat = 0;
+                                $total = 0;
+                                foreach ($component->getState() as $row) {
+                                    $total_net += $row['price'];
+                                    $total_vat += $row['vat'];
+                                    $total += $row['total'];
+                                }
+                                $set('total_net', $total_net);
+                                $set('total_vat', $total_vat);
+                                $set('total', $total);
+                            })
+                            ->button(),
+                    ])
+                    ->columns(12)
+                    ->orderColumn('order')
+                    ->collapsible()
+                    ->cloneable()
+                    ->columnSpanFull(),
 
                 Forms\Components\Section::make('Pagamenti')
                     ->schema([
@@ -270,6 +290,7 @@ class DocumentResource extends Resource
                                 Forms\Components\DatePicker::make('payment_date')
                                     ->default(now()),
                                 Forms\Components\TextInput::make('amount')
+                                    ->currencyMask(thousandSeparator: '.', decimalSeparator: ',')
                                     ->required(),
                                 Forms\Components\Select::make('payment_method_id')
                                     ->relationship(name: 'payment_method', titleAttribute: 'name'),
