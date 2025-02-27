@@ -16,10 +16,11 @@ class DocumentRow extends Model
         'description',
         'measure_unit_id',
         'quantity',
-        'price',
+        'net_price',
         'vat_id',
-        'vat',
-        'total',
+        'vat_price',
+        'total_price',
+        'gross_price',
         'notes',
     ];
 
@@ -31,7 +32,7 @@ class DocumentRow extends Model
         );
     }
 
-    protected function price(): Attribute
+    protected function net_price(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => $value / 100,
@@ -39,15 +40,23 @@ class DocumentRow extends Model
         );
     }
 
-//    protected function vat(): Attribute
-//    {
-//        return Attribute::make(
-//            get: fn ($value) => $value / 100,
-//            set: fn ($value) => $value * 100
-//        );
-//    }
+    protected function vat_price(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value / 100,
+            set: fn ($value) => $value * 100
+        );
+    }
 
-    protected function total(): Attribute
+    protected function total_price(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value / 100,
+            set: fn ($value) => $value * 100
+        );
+    }
+
+    protected function gross_price(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => $value / 100,

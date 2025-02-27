@@ -17,9 +17,9 @@ class Document extends Model
         'payment_method_id',
         'status',
         'notes',
-        'total_net',
-        'total_vat',
-        'total',
+        'net_price',
+        'vat_price',
+        'gross_price',
     ];
 
     protected $casts = [
@@ -28,7 +28,7 @@ class Document extends Model
         'status' => DocumentStatusEnum::class,
     ];
 
-    protected function totalNet(): Attribute
+    protected function net_price(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => $value / 100,
@@ -36,7 +36,7 @@ class Document extends Model
         );
     }
 
-    protected function totalVat(): Attribute
+    protected function vat_price(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => $value / 100,
@@ -44,7 +44,7 @@ class Document extends Model
         );
     }
 
-    protected function total(): Attribute
+    protected function gross_price(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => $value / 100,

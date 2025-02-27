@@ -94,19 +94,19 @@ class DocumentResource extends Resource
                                         Forms\Components\Select::make('status')
                                             ->options(DocumentStatusEnum::class)
                                             ->required(),
-                                        Forms\Components\TextInput::make('total_net')
+                                        Forms\Components\TextInput::make('net_price')
                                             ->currencyMask(thousandSeparator: '.', decimalSeparator: ',')
                                             ->default(0)
                                             //->disabled()
                                             ->inlineLabel()
                                             ->columnSpan(1),
-                                        Forms\Components\TextInput::make('total_vat')
+                                        Forms\Components\TextInput::make('vat_price')
                                             ->currencyMask(thousandSeparator: '.', decimalSeparator: ',')
                                             ->default(0)
                                             //->disabled()
                                             ->inlineLabel()
                                             ->columnSpan(1),
-                                        Forms\Components\TextInput::make('total')
+                                        Forms\Components\TextInput::make('gross_price')
                                             ->currencyMask(thousandSeparator: '.', decimalSeparator: ',')
                                             ->default(0)
                                             //->disabled()
@@ -155,7 +155,7 @@ class DocumentResource extends Resource
                             ->native(false)
                             ->columnSpan(2)
                             ->required(),
-                        Forms\Components\TextInput::make('price')
+                        Forms\Components\TextInput::make('net_price')
                             ->currencyMask(thousandSeparator: '.', decimalSeparator: ',')
                             ->columnSpan(2)
                             ->afterStateUpdated(function ($state, Forms\Get $get, Forms\Set $set) {
@@ -194,7 +194,7 @@ class DocumentResource extends Resource
 //                            ->symbolPlacement('hidden')
 //                            ->columnSpan(2)
 //                            ->required(),
-                        Forms\Components\TextInput::make('total')
+                        Forms\Components\TextInput::make('total_price')
                             ->currencyMask(thousandSeparator: '.', decimalSeparator: ',')
                             ->columnSpan(2)
                             ->required(),
