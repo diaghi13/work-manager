@@ -31,7 +31,7 @@ class MonthlyInvoicesChart extends ChartWidget
                             ->whereMonth('document_date', $month + 1)
                         ->where('type', 'invoice')
                         ->where('status', '!=', 'draft')
-                        ->sum('gross_price'))
+                        ->sum('gross_price') / 100)
                         ->toArray(),
                     'pointBackgroundColor' => 'rgb(54, 162, 235)',
                     'borderColor' => 'rgb(54, 162, 235)',
@@ -53,7 +53,7 @@ class MonthlyInvoicesChart extends ChartWidget
                             ->whereMonth('document_date', $month + 1)
                             ->where('type', 'invoice')
                             ->where('status', '!=', 'draft')
-                            ->sum('gross_price'))
+                            ->sum('gross_price') / 100)
                         ->toArray(),
                     'pointBackgroundColor' => 'rgb(0, 0, 0, 0.2)',
                     'borderColor' => 'rgba(0, 0, 0, 0.2)',

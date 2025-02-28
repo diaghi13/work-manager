@@ -58,6 +58,7 @@ class AdminPanelProvider extends PanelProvider
             //->spa()
             ->databaseTransactions()
             ->sidebarCollapsibleOnDesktop()
+            ->spa()
             ->plugins([
                 new TableLayoutTogglePlugin,
             ]);

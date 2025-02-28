@@ -46,6 +46,7 @@ class CustomerOverview extends BaseWidget
                                 ->orWhere('type', DocumentTypeEnum::RECEIPT->value);
                         })
                         ->where('status', '!=', 'draft')
+                        ->get()
                         ->sum('gross_price');
 
                     return Number::currency($total, 'EUR', 'it_IT');
@@ -56,6 +57,7 @@ class CustomerOverview extends BaseWidget
                 function () {
                     $total = Payment::where('payment_date', null)
                         ->where('expiration_date', '<', now())
+                        ->get()
                         ->sum('amount');
 
                     return Number::currency($total, 'EUR', 'it_IT');

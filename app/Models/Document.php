@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Casts\MoneyCast;
 use App\Models\Enums\DocumentStatusEnum;
 use App\Models\Enums\DocumentTypeEnum;
+use App\Observers\DocumentObserver;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
@@ -26,30 +28,16 @@ class Document extends Model
         'type' => DocumentTypeEnum::class,
         'document_date' => 'date',
         'status' => DocumentStatusEnum::class,
+        'net_price' => MoneyCast::class,
+        'vat_price' => MoneyCast::class,
+        'gross_price' => MoneyCast::class,
     ];
 
-    protected function netPrice(): Attribute
+    protected static function boot()
     {
-        return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
-        );
-    }
+        parent::boot();
 
-    protected function vatPrice(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
-        );
-    }
-
-    protected function grossPrice(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
-        );
+        self::observe(DocumentObserver::class);
     }
 
     public function customer()
