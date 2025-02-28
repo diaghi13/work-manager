@@ -18,6 +18,10 @@ class DocumentService
         $totalItems = 0;
 
         foreach ($documentRows as $row) {
+            if (!$row['vat_id'] || !$row['net_price'] || !$row['quantity']) {
+                continue;
+            }
+
             $vat = Vat::find($row['vat_id']);
 
             $netPrice = $row['net_price'] * $row['quantity'];

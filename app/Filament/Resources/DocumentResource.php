@@ -171,37 +171,25 @@ class DocumentResource extends Resource
                                 Forms\Components\Select::make('status')
                                     ->options(DocumentStatusEnum::class)
                                     ->required(),
-                                Forms\Components\Livewire::make(
-                                    DocumentTotalsComponent::class,
-                                    function (?Model $record) {
-                                        return [
-                                            'netPrice' => $record?->net_price ?? "0",
-                                            'vatPrice' => $record?->vat_price ?? "0",
-                                            'grossPrice' => $record?->gross_price ?? "0",
-                                            'itemsQuantity' => 200,
-                                        ];
 
-                                    }
-                                )
-                                    ->key('document_totals'),
-//                                        Forms\Components\TextInput::make('net_price')
-//                                            ->currencyMask(thousandSeparator: '.', decimalSeparator: ',')
-//                                            ->default(0)
-//                                            //->disabled()
-//                                            ->inlineLabel()
-//                                            ->columnSpan(1),
-//                                        Forms\Components\TextInput::make('vat_price')
-//                                            ->currencyMask(thousandSeparator: '.', decimalSeparator: ',')
-//                                            ->default(0)
-//                                            //->disabled()
-//                                            ->inlineLabel()
-//                                            ->columnSpan(1),
-//                                        Forms\Components\TextInput::make('gross_price')
-//                                            ->currencyMask(thousandSeparator: '.', decimalSeparator: ',')
-//                                            ->default(0)
-//                                            //->disabled()
-//                                            ->inlineLabel()
-//                                            ->columnSpan(1),
+                                Forms\Components\TextInput::make('net_price')
+                                    ->currencyMask(thousandSeparator: '.', decimalSeparator: ',')
+                                    ->default(0)
+                                    //->disabled()
+                                    ->inlineLabel()
+                                    ->columnSpan(1),
+                                Forms\Components\TextInput::make('vat_price')
+                                    ->currencyMask(thousandSeparator: '.', decimalSeparator: ',')
+                                    ->default(0)
+                                    //->disabled()
+                                    ->inlineLabel()
+                                    ->columnSpan(1),
+                                Forms\Components\TextInput::make('gross_price')
+                                    ->currencyMask(thousandSeparator: '.', decimalSeparator: ',')
+                                    ->default(0)
+                                    //->disabled()
+                                    ->inlineLabel()
+                                    ->columnSpan(1),
                             ])
                     ])
                     ->columns(3)
@@ -314,16 +302,20 @@ class DocumentResource extends Resource
 
                         $totals = $service->calculateTotals($rows);
 
-                        $record->net_price = $totals['net_price'];
-                        $record->vat_price = $totals['vat_price'];
-                        $record->gross_price = $totals['gross_price'];
+                        $set('net_price', $totals['net_price']);
+                        $set('vat_price', $totals['vat_price']);
+                        $set('gross_price', $totals['gross_price']);
 
-                        $set('document_totals', [
-                            'netPrice' => $totals['net_price'],
-                            'vatPrice' => $totals['vat_price'],
-                            'grossPrice' => $totals['gross_price'],
-                            'itemsQuantity' => 200,
-                        ]);
+//                        $record->net_price = $totals['net_price'];
+//                        $record->vat_price = $totals['vat_price'];
+//                        $record->gross_price = $totals['gross_price'];
+
+//                        $set('document_totals', [
+//                            'netPrice' => $totals['net_price'],
+//                            'vatPrice' => $totals['vat_price'],
+//                            'grossPrice' => $totals['gross_price'],
+//                            'itemsQuantity' => 200,
+//                        ]);
                         //dump($record);
 
                         //dump($totals);
