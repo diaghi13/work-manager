@@ -175,9 +175,9 @@ class DocumentResource extends Resource
                                     DocumentTotalsComponent::class,
                                     function (?Model $record) {
                                         return [
-                                            'netPrice' => $record?->net_price,
-                                            'vatPrice' => $record?->vat_price,
-                                            'grossPrice' => $record?->gross_price,
+                                            'netPrice' => $record?->net_price ?? "0",
+                                            'vatPrice' => $record?->vat_price ?? "0",
+                                            'grossPrice' => $record?->gross_price ?? "0",
                                             'itemsQuantity' => 200,
                                         ];
 
