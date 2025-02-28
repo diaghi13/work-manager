@@ -46,7 +46,7 @@ class CustomerOverview extends BaseWidget
                                 ->orWhere('type', DocumentTypeEnum::RECEIPT->value);
                         })
                         ->where('status', '!=', 'draft')
-                        ->sum('total');
+                        ->sum('gross_price');
 
                     return Number::currency($total, 'EUR', 'it_IT');
                 }
