@@ -358,7 +358,7 @@ class DocumentResource extends Resource
                             $endOfMonth = $paymentMethod->end_of_month;
                             $payments = [];
 
-                            $total = Money::of($get('total'), 'EUR');
+                            $total = Money::of($get('gross_price'), 'EUR');
                             $money = $total->split(count($paymentMethod->paymentMethodInstallments));
 
                             foreach ($paymentMethod->paymentMethodInstallments as $i => $installment) {
