@@ -13,8 +13,6 @@ class DocumentTotalsComponent extends Component
     public string $vatPrice = "0";
     #[Reactive]
     public string $grossPrice = "0";
-    #[Reactive]
-    public string $itemsQuantity = "0";
 
     public function render()
     {

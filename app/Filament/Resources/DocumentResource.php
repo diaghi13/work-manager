@@ -52,6 +52,16 @@ class DocumentResource extends Resource
             ]);
     }
 
+    protected function afterCreate()
+    {
+        dd('created');
+    }
+
+    protected function afterUpdate()
+    {
+        dd('updated');
+    }
+
     public static function table(Table $table): Table
     {
         return $table
@@ -172,24 +182,31 @@ class DocumentResource extends Resource
                                     ->options(DocumentStatusEnum::class)
                                     ->required(),
 
-                                Forms\Components\TextInput::make('net_price')
-                                    ->currencyMask(thousandSeparator: '.', decimalSeparator: ',')
+                                Forms\Components\Hidden::make('net_price')
+                                    //->currencyMask(thousandSeparator: '.', decimalSeparator: ',')
                                     ->default(0)
                                     //->disabled()
                                     ->inlineLabel()
                                     ->columnSpan(1),
-                                Forms\Components\TextInput::make('vat_price')
-                                    ->currencyMask(thousandSeparator: '.', decimalSeparator: ',')
+                                Forms\Components\Hidden::make('vat_price')
+                                    //->currencyMask(thousandSeparator: '.', decimalSeparator: ',')
                                     ->default(0)
                                     //->disabled()
                                     ->inlineLabel()
                                     ->columnSpan(1),
-                                Forms\Components\TextInput::make('gross_price')
-                                    ->currencyMask(thousandSeparator: '.', decimalSeparator: ',')
+                                Forms\Components\Hidden::make('gross_price')
+                                    //->currencyMask(thousandSeparator: '.', decimalSeparator: ',')
                                     ->default(0)
                                     //->disabled()
                                     ->inlineLabel()
                                     ->columnSpan(1),
+                                Forms\Components\Livewire::make(DocumentTotalsComponent::class, fn(Forms\Get $get) => [
+                                    'netPrice' => $get('net_price'),
+                                    'vatPrice' => $get('vat_price'),
+                                    'grossPrice' => $get('gross_price'),
+                                ])
+                                ->key('document_totals_component')
+                                ->reactive()
                             ])
                     ])
                     ->columns(3)

@@ -1,9 +1,3 @@
-<?php
-    $netPrice = 0;
-    $vatPrice = 0;
-    $grossPrice = 0;
-?>
-
 <div>
     <div class="flex justify-between py-2">
         <span class="font-thin text-gray-700">Totale imponibile</span>
