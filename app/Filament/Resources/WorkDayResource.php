@@ -208,6 +208,9 @@ class WorkDayResource extends Resource
                 Tables\Columns\TextColumn::make('daily_allowance')
                     ->money('EUR')
                     ->toggleable(),
+                Tables\Columns\TextColumn::make('remaining_allowance')
+                    ->money('EUR')
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('customer.name')
                     ->label('Customer')
                     ->sortable()

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\MoneyCast;
 use App\Models\Enums\OutgoingTypeEnum;
 use App\Observers\WorkDayObserver;
 use Carbon\Carbon;
@@ -32,6 +33,11 @@ class WorkDay extends Model
         'start_date_time' => 'datetime',
         'end_date_time' => 'datetime',
         'calculate_extra_cost' => 'boolean',
+        'extra_time_cost' => MoneyCast::class,
+        'daily_cost' => MoneyCast::class,
+        'daily_allowance' => MoneyCast::class,
+        'total_remuneration' => MoneyCast::class,
+        'total_extra_cost' => MoneyCast::class,
     ];
 
     protected $with = [
@@ -47,46 +53,6 @@ class WorkDay extends Model
 //        'total_remuneration',
 //        'total_extra_cost',
     ];
-
-    protected function extraTimeCost(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
-        );
-    }
-
-    protected function dailyCost(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
-        );
-    }
-
-    protected function totalRemuneration(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
-        );
-    }
-
-    protected function totalExtraCost(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
-        );
-    }
-
-    protected function dailyAllowance(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
-        );
-    }
 
     public static function boot()
     {
@@ -196,5 +162,18 @@ class WorkDay extends Model
     public function getTotalCostAttribute()
     {
         return $this->total_remuneration + $this->total_extra_cost;
+    }
+
+    public function getRemainingAllowanceAttribute()
+    {
+        if ($this->daily_allowance && $this->daily_allowance > 0) {
+
+            $outgoingsAmount = $this->outgoings
+                ->where('type', OutgoingTypeEnum::MEAL)
+                ->where('type', OutgoingTypeEnum::OVERNIGHT)
+                ->sum('amount');
+
+            return $this->daily_allowance - $outgoingsAmount;
+        }
     }
 }

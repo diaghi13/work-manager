@@ -8,6 +8,7 @@ enum OutgoingTypeEnum: string implements HasLabel
 {
     case TRAVEL = 'travel';
     case MEAL = 'meal';
+    case OVERNIGHT = 'overnight';
     case FUEL = 'fuel';
     case EXTRA = 'extra';
     case OTHER = 'other';
@@ -17,6 +18,7 @@ enum OutgoingTypeEnum: string implements HasLabel
         return match ($this) {
             self::TRAVEL => 'Viaggio',
             self::MEAL => 'Pasto',
+            self::OVERNIGHT => 'Pernottamento',
             self::FUEL => 'Carburante',
             self::EXTRA => 'Extra',
             self::OTHER => 'Altro',

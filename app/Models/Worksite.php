@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\MoneyCast;
 use App\Models\Enums\WorksitePaymentStatusEnum;
 use App\Models\Enums\WorksiteStatusEnum;
 use App\Models\Enums\WorksiteTypeEnum;
@@ -38,31 +39,10 @@ class Worksite extends Model
         'end_date' => 'date',
         'status' => WorksiteStatusEnum::class,
         'type' => WorksiteTypeEnum::class,
+        'daily_cost' => MoneyCast::class,
+        'extra_time_cost' => MoneyCast::class,
+        'daily_allowance' => MoneyCast::class,
     ];
-
-    protected function dailyCost(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
-        );
-    }
-
-    protected function extraTimeCost(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
-        );
-    }
-
-    protected function dailyAllowance(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
-        );
-    }
 
     protected static function boot()
     {
@@ -113,6 +93,15 @@ class Worksite extends Model
     public function getTotalExtraCostAttribute()
     {
         return $this->work_days->sum('total_extra_cost');
+    }
+
+    public function getRemainingAllowanceAttribute()
+    {
+        $remainingAllowance = $this->work_days->sum('remaining_allowance');
+
+        return $remainingAllowance > 0
+            ? $remainingAllowance
+            : null;
     }
 
 //    public function getTotalExtraCostAttribute()

@@ -237,6 +237,9 @@ class WorksiteResource extends Resource
             Tables\Columns\TextColumn::make('total_extra_cost')
                 ->money('EUR')
                 ->sortable(),
+            Tables\Columns\TextColumn::make('remaining_allowance')
+                ->money('EUR')
+                ->sortable(),
             Tables\Columns\TextColumn::make('full_address'),
             Tables\Columns\TextColumn::make('created_at')
                 ->dateTime()
