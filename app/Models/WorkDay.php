@@ -169,8 +169,10 @@ class WorkDay extends Model
         if ($this->daily_allowance && $this->daily_allowance > 0) {
 
             $outgoingsAmount = $this->outgoings
-                ->where('type', OutgoingTypeEnum::MEAL)
-                ->where('type', OutgoingTypeEnum::OVERNIGHT)
+                ->filter(function ($outgoing) {
+                    return $outgoing->type === OutgoingTypeEnum::MEAL
+                        || $outgoing->type === OutgoingTypeEnum::OVERNIGHT;
+                })
                 ->sum('amount');
 
             return $this->daily_allowance - $outgoingsAmount;
