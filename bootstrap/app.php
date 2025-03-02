@@ -11,10 +11,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->trustProxies(at: [
-            'https://work-manager.ddns.net/',
-            'http://192.168.1.3/'
-        ]);
+//        $middleware->trustProxies(at: [
+//            'https://work-manager.ddns.net/',
+//            'http://192.168.1.3/'
+//        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
