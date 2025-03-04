@@ -38,7 +38,7 @@ class CustomerOverview extends BaseWidget
                     ->orWhere('status', WorksiteStatusEnum::ACTIVE->value)
                     ->count()),
             Stat::make(
-                'Fatturato annuale',
+                'Fatturato ' . now()->year,
                 function () {
                     $total = Document::whereYear('document_date', now()->year)
                         ->where(function (Builder $query) {
@@ -51,6 +51,16 @@ class CustomerOverview extends BaseWidget
 
                     return Number::currency($total, 'EUR', 'it_IT');
                 }
+            )
+            ->description('Fatturato ' .
+                now()->subYear()->year . ': ' .
+                Number::currency(
+                    Document::whereYear('document_date', now()->subYear()->year)
+                        ->where('type', DocumentTypeEnum::INVOICE->value)
+                        ->get()
+                        ->sum('gross_price'),
+                    'EUR',
+                    'it_IT')
             ),
             Stat::make(
                 'Crediti',
