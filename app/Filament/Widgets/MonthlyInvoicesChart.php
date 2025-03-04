@@ -28,10 +28,11 @@ class MonthlyInvoicesChart extends ChartWidget
 //                        ->toArray()
                     'data' => collect([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
                         ->map(fn($month) => Document::whereYear('document_date', $currentYear)
-                            ->whereMonth('document_date', $month + 1)
-                        ->where('type', 'invoice')
-                        ->where('status', '!=', 'draft')
-                        ->sum('gross_price') / 100)
+                                ->whereMonth('document_date', $month + 1)
+                                ->where('type', 'invoice')
+                                ->orWhere('type', 'receipt')
+                                ->where('status', '!=', 'draft')
+                                ->sum('gross_price') / 100)
                         ->toArray(),
                     'pointBackgroundColor' => 'rgb(54, 162, 235)',
                     'borderColor' => 'rgb(54, 162, 235)',
@@ -51,10 +52,11 @@ class MonthlyInvoicesChart extends ChartWidget
 //                        ->toArray()
                     'data' => collect([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
                         ->map(fn($month) => Document::whereYear('document_date', $lastYear)
-                            ->whereMonth('document_date', $month + 1)
-                            ->where('type', 'invoice')
-                            ->where('status', '!=', 'draft')
-                            ->sum('gross_price') / 100)
+                                ->whereMonth('document_date', $month + 1)
+                                ->where('type', 'invoice')
+                                ->orWhere('type', 'receipt')
+                                ->where('status', '!=', 'draft')
+                                ->sum('gross_price') / 100)
                         ->toArray(),
                     'pointBackgroundColor' => 'rgb(0, 0, 0, 0.2)',
                     'borderColor' => 'rgba(0, 0, 0, 0.2)',
