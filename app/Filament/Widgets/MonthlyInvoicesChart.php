@@ -4,6 +4,7 @@ namespace App\Filament\Widgets;
 
 use App\Models\Document;
 use Filament\Widgets\ChartWidget;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class MonthlyInvoicesChart extends ChartWidget
@@ -29,8 +30,10 @@ class MonthlyInvoicesChart extends ChartWidget
                     'data' => collect([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
                         ->map(fn($month) => Document::whereYear('document_date', $currentYear)
                                 ->whereMonth('document_date', $month + 1)
-                                ->where('type', 'invoice')
-                                ->orWhere('type', 'receipt')
+                                ->where(function (Builder $query) {
+                                    $query->where('type', 'invoice')
+                                        ->orWhere('type', 'receipt');
+                                })
                                 ->where('status', '!=', 'draft')
                                 ->sum('gross_price') / 100)
                         ->toArray(),
@@ -53,8 +56,10 @@ class MonthlyInvoicesChart extends ChartWidget
                     'data' => collect([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
                         ->map(fn($month) => Document::whereYear('document_date', $lastYear)
                                 ->whereMonth('document_date', $month + 1)
-                                ->where('type', 'invoice')
-                                ->orWhere('type', 'receipt')
+                                ->where(function (Builder $query) {
+                                    $query->where('type', 'invoice')
+                                        ->orWhere('type', 'receipt');
+                                })
                                 ->where('status', '!=', 'draft')
                                 ->sum('gross_price') / 100)
                         ->toArray(),
