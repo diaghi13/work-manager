@@ -37,6 +37,7 @@ class MonthlyInvoicesChart extends ChartWidget
                     'borderColor' => 'rgb(54, 162, 235)',
                     'backgroundColor' => 'rgba(54, 162, 235, 0.2)',
                     'fill' => true,
+                    'tension' => 0.3,
                 ],
                 [
                     'label' => 'Invoices 2024',
@@ -59,6 +60,7 @@ class MonthlyInvoicesChart extends ChartWidget
                     'borderColor' => 'rgba(0, 0, 0, 0.2)',
                     'backgroundColor' => 'rgba(0, 0, 0, 0.1)',
                     'fill' => true,
+                    'tension' => 0.3,
                 ]
             ],
             'labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],

@@ -56,7 +56,10 @@ class CustomerOverview extends BaseWidget
                 now()->subYear()->year . ': ' .
                 Number::currency(
                     Document::whereYear('document_date', now()->subYear()->year)
-                        ->where('type', DocumentTypeEnum::INVOICE->value)
+                        ->where(function (Builder $query) {
+                            $query->where('type', DocumentTypeEnum::INVOICE->value)
+                                ->orWhere('type', DocumentTypeEnum::RECEIPT->value);
+                        })
                         ->get()
                         ->sum('gross_price'),
                     'EUR',
