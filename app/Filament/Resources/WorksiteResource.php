@@ -177,8 +177,8 @@ class WorksiteResource extends Resource
     {
         return [
             'index' => Pages\ListWorksites::route('/'),
-            'show' => Pages\ViewWorksite::route('/{record}'),
             'create' => Pages\CreateWorksite::route('/create'),
+            'show' => Pages\ViewWorksite::route('/{record}'),
             'edit' => Pages\EditWorksite::route('/{record}/edit'),
         ];
     }
