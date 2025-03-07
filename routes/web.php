@@ -33,5 +33,7 @@ Route::get( '/db-string', function () {
     $user = auth()->user();
     $databaseName = 'wm_tenant_' . Str::random(8) . '_' . $user->id;
 
+    $user->update(['database' => $databaseName]);
+
     return $databaseName;
 });
