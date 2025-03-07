@@ -12,7 +12,7 @@ class TenantMigrate extends Command
      *
      * @var string
      */
-    protected $signature = 'tenant:migrate {database} {--seed} {--fresh} {--step}';
+    protected $signature = 'tenant:migrate {database} {--seed} {--fresh} {--step} {--force}';
 
     /**
      * The console command description.
@@ -30,6 +30,7 @@ class TenantMigrate extends Command
         $seed = $this->option('seed');
         $fresh = $this->option('fresh');
         $step = $this->option('step');
+        $force = $this->option('force');
 
         $this->info("Migrating database: {$database}");
 
@@ -45,6 +46,7 @@ class TenantMigrate extends Command
         $options = [
             '--database' => 'mysql',
             '--path' => 'database/migrations/tenant',
+            '--force' => $force,
         ];
 
         if ($step) {

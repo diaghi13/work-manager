@@ -27,6 +27,7 @@ class ProcessTenantMigrationJob implements ShouldQueue
             'database' => $this->database,
             '--seed' => true,
             '--step' => true,
+            '--force' => true,
         ]);
     }
 }
