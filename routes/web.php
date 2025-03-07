@@ -28,3 +28,10 @@ Route::get('/', function () {
 Route::get('/pulsantone', function () {
     return view('pulsantone');
 });
+
+Route::get( '/db-string', function () {
+    $user = auth()->user();
+    $databaseName = 'wm_tenant_' . Str::random(8) . '_' . $user->id;
+
+    return $databaseName;
+});
