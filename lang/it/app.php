@@ -1,6 +1,40 @@
 <?php
 
 return [
+    'dashboard' => [
+        'welcome' => 'Benvenuto!',
+        'stats' => [
+            'customers' => 'Clienti',
+            'annual_remuneration' => 'Retribuzione annuale',
+            'annual_works' => 'Lavori annuali',
+            'revenue' => 'Fatturato',
+            'revenue_previous_year' => 'Fatturato anno precedente',
+            'credits' => 'Crediti',
+        ],
+        'monthly_revenue_chart' => [
+            'title' => 'Fatturato mensile',
+            'this_year' => 'Quest\'anno',
+            'last_year' => 'Anno precedente',
+        ],
+    ],
+
+    'customers' => [
+        'drawer_label' => 'Clienti',
+        'name' => 'Nome',
+        'vat_code' => 'Codice IVA',
+        'vat_id' => 'Partita IVA',
+        'sdi_code' => 'Codice SDI',
+        'address' => 'Indirizzo',
+        'city' => 'Città',
+        'zip_code' => 'CAP',
+        'number' => 'Numero',
+        'street' => 'Via',
+        'state' => 'Provincia',
+        'country' => 'Paese',
+        'edit' => 'Modifica',
+        'delete' => 'Elimina',
+    ],
+
     'work_day' => 'Giornata di lavoro',
 
     'worksite' => 'Cantiere',

@@ -18,9 +18,9 @@ class CustomerOverview extends BaseWidget
     protected function getStats(): array
     {
         return [
-            Stat::make('Clienti', Customer::count()),
+            Stat::make(__('app.dashboard.stats.customers'), Customer::count()),
             Stat::make(
-                'Retribuzione annuale',
+                __('app.dashboard.stats.annual_remuneration'),
                 function () {
                     $total = Worksite::whereYear('start_date', now()->year)
                         ->get()
@@ -30,7 +30,7 @@ class CustomerOverview extends BaseWidget
                 }
             ),
             Stat::make(
-                'Lavori annuali',
+                __('app.dashboard.stats.annual_works'),
                 Worksite::whereYear('start_date', now()->year)
                     ->where('status', WorksiteStatusEnum::ACCEPTED->value)
                     ->orWhere('status', WorksiteStatusEnum::IN_PROGRESS->value)
@@ -38,7 +38,7 @@ class CustomerOverview extends BaseWidget
                     ->orWhere('status', WorksiteStatusEnum::ACTIVE->value)
                     ->count()),
             Stat::make(
-                'Fatturato ' . now()->year,
+                __('app.dashboard.stats.revenue') . ' ' . now()->year,
                 function () {
                     $total = Document::whereYear('document_date', now()->year)
                         ->where(function (Builder $query) {
@@ -52,8 +52,7 @@ class CustomerOverview extends BaseWidget
                     return Number::currency($total, 'EUR', 'it_IT');
                 }
             )
-            ->description('Fatturato ' .
-                now()->subYear()->year . ': ' .
+            ->description(__('app.dashboard.stats.revenue_previous_year') . ' ' .
                 Number::currency(
                     Document::whereYear('document_date', now()->subYear()->year)
                         ->where(function (Builder $query) {
@@ -66,7 +65,7 @@ class CustomerOverview extends BaseWidget
                     'it_IT')
             ),
             Stat::make(
-                'Crediti',
+                __('app.dashboard.stats.credits'),
                 function () {
                     $total = Payment::where('payment_date', null)
                         ->where('expiration_date', '<', now())

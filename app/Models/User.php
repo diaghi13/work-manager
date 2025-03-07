@@ -22,6 +22,7 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
+        'database',
     ];
 
     /**
@@ -45,6 +46,13 @@ class User extends Authenticatable implements FilamentUser
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        self::observe(\App\Observers\UserObserver::class);
     }
 
     public function canAccessPanel(\Filament\Panel $panel): bool

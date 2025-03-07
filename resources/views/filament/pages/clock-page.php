@@ -1,4 +1,4 @@
-<div style="height: 90vh" class="flex items-center justify-center">
+<div class="flex items-center justify-center h-screen">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <div class="text-center">
         <div id="clock" class="text-4xl font-semibold mb-4">00:00:00</div>

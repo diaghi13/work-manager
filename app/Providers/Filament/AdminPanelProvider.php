@@ -2,6 +2,9 @@
 
 namespace App\Providers\Filament;
 
+use App\CustomRegister;
+use App\Filament\Pages\Auth\EditProfile;
+use App\Http\Middleware\RegisteredDatabaseHandlerMiddleware;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -46,6 +49,7 @@ class AdminPanelProvider extends PanelProvider
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
                 AuthenticateSession::class,
+                RegisteredDatabaseHandlerMiddleware::class,
                 ShareErrorsFromSession::class,
                 VerifyCsrfToken::class,
                 SubstituteBindings::class,
@@ -55,12 +59,13 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            //->spa()
             ->databaseTransactions()
             ->sidebarCollapsibleOnDesktop()
-            ->spa()
+            //->spa()
             ->plugins([
                 new TableLayoutTogglePlugin,
-            ]);
+            ])
+            ->registration(CustomRegister::class)
+            ->profile(EditProfile::class);
     }
 }

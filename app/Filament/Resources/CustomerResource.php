@@ -18,6 +18,19 @@ class CustomerResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user';
 
+    public static function getLabel(): ?string
+    {
+        return __('app.customers.drawer_label');
+    }
+
+    /**
+     * @return string|null
+     */
+    public static function getPluralLabel(): ?string
+    {
+        return __('app.customers.drawer_label');
+    }
+
     public static function form(Form $form): Form
     {
         CreateAction::make()
@@ -65,16 +78,26 @@ class CustomerResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('vat_code'),
-                Tables\Columns\TextColumn::make('vat_id'),
-                Tables\Columns\TextColumn::make('street'),
-                Tables\Columns\TextColumn::make('number'),
-                Tables\Columns\TextColumn::make('zip_code'),
-                Tables\Columns\TextColumn::make('city'),
-                Tables\Columns\TextColumn::make('state'),
-                Tables\Columns\TextColumn::make('country'),
-                Tables\Columns\TextColumn::make('sdi_code'),
+                Tables\Columns\TextColumn::make('name')
+                    ->label(__('app.customers.name')),
+                Tables\Columns\TextColumn::make('vat_code')
+                    ->label(__('app.customers.vat_code')),
+                Tables\Columns\TextColumn::make('vat_id')
+                    ->label(__('app.customers.vat_id')),
+                Tables\Columns\TextColumn::make('street')
+                    ->label(__('app.customers.street')),
+                Tables\Columns\TextColumn::make('number')
+                    ->label(__('app.customers.number')),
+                Tables\Columns\TextColumn::make('zip_code')
+                    ->label(__('app.customers.zip_code')),
+                Tables\Columns\TextColumn::make('city')
+                    ->label(__('app.customers.city')),
+                Tables\Columns\TextColumn::make('state')
+                    ->label(__('app.customers.state')),
+                Tables\Columns\TextColumn::make('country')
+                    ->label(__('app.customers.country')),
+                Tables\Columns\TextColumn::make('sdi_code')
+                    ->label(__('app.customers.sdi_code')),
             ])
             ->filters([
                 //

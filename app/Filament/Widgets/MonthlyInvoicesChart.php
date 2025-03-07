@@ -3,30 +3,41 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Document;
+use Filament\Facades\Filament;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Collection;
 
 class MonthlyInvoicesChart extends ChartWidget
 {
-    protected static ?string $heading = 'Chart';
+    //protected static ?string $heading = 'dashboard.monthly_revenue_chart.title';
+
+    public function getHeading(): string|Htmlable|null
+    {
+        return __('app.dashboard.monthly_revenue_chart.title');
+    }
 
     protected function getData(): array
     {
         $currentYear = now()->year;
         $lastYear = now()->subYear()->year;
+
         return [
             'datasets' => [
                 [
-                    'label' => 'Invoices 2025!',
+                    'label' => __('app.dashboard.monthly_revenue_chart.this_year'),
 //                    'data' => Document::whereYear('document_date', 2025)
-//                        ->where('type', 'invoice')
+//                        ->where(function (Builder $query) {
+//                            $query->where('type', 'invoice')
+//                                ->orWhere('type', 'receipt');
+//                        })
 //                        ->where('status', '!=', 'draft')
 //                        ->get()
 //                        ->groupBy(fn ($document) => $document->document_date->format('m'))
 //                        ->map(fn ($invoices) => $invoices->sum('total'))
 //                        ->values()
-//                        ->toArray()
+//                        ->toArray(),
                     'data' => collect([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
                         ->map(fn($month) => Document::whereYear('document_date', $currentYear)
                                 ->whereMonth('document_date', $month + 1)
@@ -44,7 +55,7 @@ class MonthlyInvoicesChart extends ChartWidget
                     'tension' => 0.3,
                 ],
                 [
-                    'label' => 'Invoices 2024',
+                    'label' => __('app.dashboard.monthly_revenue_chart.last_year'),
 //                    'data' => Document::whereYear('document_date', 2025)
 //                        ->where('type', 'invoice')
 //                        ->where('status', '!=', 'draft')
@@ -63,7 +74,7 @@ class MonthlyInvoicesChart extends ChartWidget
                                 ->where('status', '!=', 'draft')
                                 ->sum('gross_price') / 100)
                         ->toArray(),
-                    'pointBackgroundColor' => 'rgb(0, 0, 0, 0.2)',
+                    'pointBackgroundColor' => Filament::getTheme(),
                     'borderColor' => 'rgba(0, 0, 0, 0.2)',
                     'backgroundColor' => 'rgba(0, 0, 0, 0.1)',
                     'fill' => true,
