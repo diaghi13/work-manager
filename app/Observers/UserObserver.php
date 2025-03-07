@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Jobs\ProcessTenantDatabaseCreationJob;
 use App\Jobs\ProcessTenantMigrationJob;
+use App\Jobs\ProcessTenantSeedJob;
 use App\Models\User;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Str;
@@ -28,6 +29,7 @@ class UserObserver
         Bus::chain([
             new ProcessTenantDatabaseCreationJob($databaseName),
             new ProcessTenantMigrationJob($databaseName),
+            new ProcessTenantSeedJob($databaseName),
         ])->dispatch();
     }
 
