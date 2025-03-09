@@ -28,6 +28,19 @@ class WorkDayResource extends Resource
 
     //protected static string | array $routeMiddleware = RegisteredDatabaseHandlerMiddleware::class;
 
+    public static function getLabel(): ?string
+    {
+        return __('app.work_day.single');
+    }
+
+    /**
+     * @return string|null
+     */
+    public static function getPluralLabel(): ?string
+    {
+        return __('app.work_day.multiple');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -160,67 +173,73 @@ class WorkDayResource extends Resource
                 $query->with(['outgoings']);
             })
             ->columns([
-//                Tables\Columns\TextColumn::make('start_date_time')
-//                    ->label('Start')
-//                    ->dateTime('d/m/y H:i')
-//                    ->sortable(),
-//                Tables\Columns\TextColumn::make('end_date_time')
-//                    ->label('End')
-//                    ->dateTime('d/m/y H:i')
-//                    ->sortable(),
                 Tables\Columns\TextColumn::make('date')
-                    ->label('Date')
+                    ->label(__('app.work_day.date'))
                     ->dateTime('d/m/y')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('worksite.name')
-                    ->label('Worksite')
+                    ->label(__('app.work_day.worksite'))
                     ->sortable()
                     ->toggleable()
                     ->searchable(),
+                Tables\Columns\TextColumn::make('description')
+                    ->label(__('app.work_day.description'))
+                    ->toggleable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('daily_cost')
+                    ->label(__('app.work_day.daily_cost'))
                     ->money('EUR'),
-                Tables\Columns\TextColumn::make('total_hours'),
-                Tables\Columns\TextColumn::make('extra_time'),
+                Tables\Columns\TextColumn::make('total_hours')
+                    ->label(__('app.work_day.total_hours')),
+                Tables\Columns\TextColumn::make('extra_time')
+                ->label(__('app.work_day.extra_time')),
                 Tables\Columns\TextColumn::make('extra_time_cost')
+                    ->label(__('app.work_day.extra_time_cost'))
                     ->money('EUR'),
                 Tables\Columns\IconColumn::make('calculate_extra_time_cost')
-                    ->label('Extra Time')
+                    ->label(__('app.work_day.calculate_extra_time_cost'))
                     ->toggleable()
                     ->boolean(),
                 Tables\Columns\TextColumn::make('total_remuneration')
+                    ->label(__('app.work_day.total_remuneration'))
                     ->money('EUR')
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('travel_cost')
+                    ->label(__('app.work_day.travel_cost'))
                     ->money('EUR')
                     ->toggleable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('meal_cost')
+                    ->label(__('app.work_day.meal_cost'))
                     ->money('EUR')
                     ->toggleable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('extra_cost')
+                    ->label(__('app.work_day.extra_cost'))
                     ->money('EUR')
                     ->toggleable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('total_extra_cost')
+                    ->label(__('app.work_day.total_extra_cost'))
                     ->money('EUR')
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('total_cost')
+                    ->label(__('app.work_day.total_cost'))
                     ->money('EUR')
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('daily_allowance')
+                    ->label(__('app.work_day.daily_allowance'))
                     ->money('EUR')
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('remaining_allowance')
+                    ->label(__('app.work_day.remaining_allowance'))
                     ->money('EUR')
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('customer.name')
+                    ->label(__('app.work_day.customer'))
                     ->label('Customer')
                     ->sortable()
                     ->toggleable(),
-                Tables\Columns\TextColumn::make('description')
-                    ->toggleable()
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

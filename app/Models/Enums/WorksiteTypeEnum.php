@@ -13,9 +13,9 @@ enum WorksiteTypeEnum: string implements HasLabel
     public function getLabel(): string
     {
         return match ($this) {
-            self::TECHNICIAN => 'Technician',
-            self::TOUR => 'Tour',
-            self::SERVICE => 'Service',
+            self::TECHNICIAN => __('app.job_type.technician'),
+            self::TOUR => __('app.job_type.tour'),
+            self::SERVICE => __('app.job_type.service'),
         };
     }
 }

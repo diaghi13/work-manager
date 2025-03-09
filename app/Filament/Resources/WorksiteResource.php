@@ -15,6 +15,7 @@ use Filament\Forms\Form;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
+use Filament\Support\Colors\Color;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Hydrat\TableLayoutToggle\Concerns\HasToggleableTable;
@@ -31,13 +32,26 @@ class WorksiteResource extends Resource
 
     protected static ?string $navigationGroup = 'Work';
 
-    public static function getRecordSubNavigation(\Filament\Resources\Pages\Page $page): array
+    public static function getLabel(): ?string
     {
-        return $page->generateNavigationItems([
-            Pages\ViewWorksite::class,
-            Pages\EditWorksite::class,
-        ]);
+        return __('app.worksite.single');
     }
+
+    /**
+     * @return string|null
+     */
+    public static function getPluralLabel(): ?string
+    {
+        return __('app.worksite.plural');
+    }
+
+//    public static function getRecordSubNavigation(\Filament\Resources\Pages\Page $page): array
+//    {
+//        return $page->generateNavigationItems([
+//            Pages\ViewWorksite::class,
+//            Pages\EditWorksite::class,
+//        ]);
+//    }
 
     public static function form(Form $form): Form
     {
@@ -46,9 +60,11 @@ class WorksiteResource extends Resource
                 Forms\Components\Fieldset::make(__('app.general'))
                     ->schema([
                         Forms\Components\TextInput::make('name')
+                            ->label(__('app.worksite.name'))
                             ->maxLength(255)
                             ->columnSpanFull(),
                         Forms\Components\Select::make('customer_id')
+                            ->label(__('app.worksite.customer'))
                             ->relationship(name: 'customer', titleAttribute: 'name')
                             ->required()
                             ->live()
@@ -60,33 +76,42 @@ class WorksiteResource extends Resource
                                 }
                             }),
                         Forms\Components\Select::make('type')
+                            ->label(__('app.worksite.job_type'))
                             ->options(WorksiteTypeEnum::class)
                             ->default(WorksiteTypeEnum::TECHNICIAN)
                             ->live()
                             ->required(),
-                        Forms\Components\DatePicker::make('start_date'),
-                        Forms\Components\DatePicker::make('end_date'),
+                        Forms\Components\DatePicker::make('start_date')
+                        ->label(__('app.worksite.start_date')),
+                        Forms\Components\DatePicker::make('end_date')
+                        ->label(__('app.worksite.end_date')),
                         Forms\Components\Select::make('status')
+                            ->label(__('app.worksite.status'))
                             ->options(WorksiteStatusEnum::class),
                         Forms\Components\Textarea::make('notes')
+                            ->label(__('app.notes'))
                             ->columnSpanFull(),
                     ])
                     ->columns(2),
                 Forms\Components\Fieldset::make(__('app.address'))
                     ->schema([
                         Forms\Components\TextInput::make('location')
+                            ->label(__('app.worksite.location'))
                             ->maxLength(255)
                             ->reactive()
                             ->columnSpanFull(),
                         Forms\Components\Group::make()
                             ->schema([
                                 Forms\Components\TextInput::make('address')
+                                    ->label(__('app.worksite.address'))
                                     ->maxLength(255)
                                     ->columnSpan(4),
                                 Forms\Components\TextInput::make('number')
+                                    ->label(__('app.worksite.number'))
                                     ->maxLength(255)
                                     ->columnSpan(1),
                                 Forms\Components\TextInput::make('zip_code')
+                                    ->label(__('app.worksite.zip_code'))
                                     ->maxLength(255)
                                     ->columnSpan(1),
                             ])
@@ -95,12 +120,15 @@ class WorksiteResource extends Resource
                         Forms\Components\Group::make()
                             ->schema([
                                 Forms\Components\TextInput::make('city')
+                                    ->label(__('app.worksite.city'))
                                     ->maxLength(255)
                                     ->columnSpan(3),
                                 Forms\Components\TextInput::make('province')
+                                    ->label(__('app.worksite.province'))
                                     ->maxLength(255)
                                     ->columnSpan(1),
                                 Forms\Components\TextInput::make('country')
+                                    ->label(__('app.worksite.country'))
                                     ->maxLength(255)
                                     ->columnSpan(2),
                             ])
@@ -115,10 +143,14 @@ class WorksiteResource extends Resource
                     ),
                 Forms\Components\Fieldset::make(__('app.payment_conditions'))
                     ->schema([
-                        Forms\Components\TextInput::make('daily_cost'),
-                        Forms\Components\TextInput::make('extra_time_cost'),
-                        Forms\Components\TextInput::make('daily_hours'),
-                        Forms\Components\TextInput::make('daily_allowance'),
+                        Forms\Components\TextInput::make('daily_cost')
+                        ->label(__('app.worksite.daily_cost')),
+                        Forms\Components\TextInput::make('extra_time_cost')
+                        ->label(__('app.worksite.extra_time_cost')),
+                        Forms\Components\TextInput::make('daily_hours')
+                        ->label(__('app.worksite.daily_hours')),
+                        Forms\Components\TextInput::make('daily_allowance')
+                        ->label(__('app.worksite.daily_allowance')),
                     ])
                     ->columns(2),
             ]);
@@ -187,8 +219,10 @@ class WorksiteResource extends Resource
     {
         return [
             Tables\Columns\TextColumn::make('name')
+                ->label(__('app.worksite.name'))
                 ->searchable(),
             Tables\Columns\TextColumn::make('type')
+                ->label(__('app.worksite.job_type'))
                 ->badge()
                 ->color(fn(Worksite $worksite): string => match ($worksite->type) {
                     WorksiteTypeEnum::TECHNICIAN => 'primary',
@@ -203,6 +237,7 @@ class WorksiteResource extends Resource
                 ->toggleable()
                 ->searchable(),
             Tables\Columns\TextColumn::make('location')
+                ->label(__('app.worksite.location'))
                 ->grow(false)
                 ->extraAttributes([
                     'style' => 'min-width: 200px;',
@@ -219,7 +254,7 @@ class WorksiteResource extends Resource
             Tables\Columns\TextColumn::make('status')
                 ->badge()
                 ->color(fn(Worksite $worksite): string => match ($worksite->status) {
-                    WorksiteStatusEnum::COMPLETED, WorksiteStatusEnum::ACCEPTED => 'success',
+                    WorksiteStatusEnum::COMPLETED => 'success',
                     WorksiteStatusEnum::REJECTED, WorksiteStatusEnum::CANCELLED => 'danger',
                     WorksiteStatusEnum::IN_PROGRESS => 'warning',
                     default => 'info',

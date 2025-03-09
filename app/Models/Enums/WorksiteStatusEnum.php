@@ -18,14 +18,14 @@ enum WorksiteStatusEnum: string implements HasLabel
     public function getLabel(): string
     {
         return match ($this) {
-            self::ACTIVE => 'Active',
-            self::REJECTED => 'Rejected',
-            self::PENDING => 'Pending',
-            self::COMPLETED => 'Completed',
-            self::CANCELLED => 'Cancelled',
-            self::ACCEPTED => 'Accepted',
-            self::IN_PROGRESS => 'In Progress',
-            self::INCOMING => 'Incoming',
+            self::ACTIVE => __('app.status_type.active'),
+            self::REJECTED => __('app.status_type.rejected'),
+            self::PENDING => __('app.status_type.pending'),
+            self::COMPLETED => __('app.status_type.completed'),
+            self::CANCELLED => __('app.status_type.cancelled'),
+            self::ACCEPTED => __('app.status_type.accepted'),
+            self::IN_PROGRESS => __('app.status_type.in_progress'),
+            self::INCOMING => __('app.status_type.incoming'),
         };
     }
 }
