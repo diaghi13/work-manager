@@ -154,11 +154,14 @@
             fetch('/api/v1/end-workday', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                 },
                 body: JSON.stringify(data)
             }).then(response => {
                 if (!response.ok) {
+                    console.log(response);
                     throw new Error('Network response was not ok');
                 }
                 return response.json();

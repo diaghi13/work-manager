@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\WorkDayResource\Pages;
 use App\Filament\Resources\WorkDayResource\RelationManagers;
+use App\Http\Middleware\RegisteredDatabaseHandlerMiddleware;
 use App\Models\Customer;
 use App\Models\Enums\WorkDayTypeEnum;
 use App\Models\WorkDay;
@@ -24,6 +25,8 @@ class WorkDayResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-briefcase';
 
     protected static ?string $navigationGroup = 'Work';
+
+    //protected static string | array $routeMiddleware = RegisteredDatabaseHandlerMiddleware::class;
 
     public static function form(Form $form): Form
     {

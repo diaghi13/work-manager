@@ -49,12 +49,12 @@ class AdminPanelProvider extends PanelProvider
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
                 AuthenticateSession::class,
-                RegisteredDatabaseHandlerMiddleware::class,
                 ShareErrorsFromSession::class,
                 VerifyCsrfToken::class,
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                RegisteredDatabaseHandlerMiddleware::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
