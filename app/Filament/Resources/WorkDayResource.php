@@ -50,13 +50,13 @@ class WorkDayResource extends Resource
                         Forms\Components\Select::make('type')
                             ->options(WorkDayTypeEnum::class)
                             ->default(WorkDayTypeEnum::WORK)
-                            ->label(__('app.type'))
+                            ->label(__('app.work_day.type'))
                             ->required(),
                         Forms\Components\Select::make('worksite_id')
                             ->native(false)
                             //->searchable()
                             ->relationship(name: 'worksite', titleAttribute: 'name')
-                            ->label(__('app.worksite'))
+                            ->label(__('app.work_day.worksite'))
                             ->required()
                             ->columnSpan(1)
                             ->live()
@@ -97,7 +97,7 @@ class WorkDayResource extends Resource
                     ->columnSpanFull(),
 
                 Forms\Components\Checkbox::make('all_worksites')
-                    ->label(__('app.all_worksites'))
+                    ->label(__('app.work_day.all_worksites'))
                     ->columnSpanFull()
                     ->live()
                     ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set) {
@@ -109,7 +109,7 @@ class WorkDayResource extends Resource
                 Forms\Components\Group::make()
                     ->schema([
                         Forms\Components\DatePicker::make('date')
-                            ->label(__('app.date'))
+                            ->label(__('app.work_day.date'))
                             ->default(Carbon::today())
                             ->required(),
 //                Forms\Components\DateTimePicker::make('start_date_time')
@@ -121,7 +121,7 @@ class WorkDayResource extends Resource
 //                    ->default(Carbon::today()->hour(18)->minute(0)->second(0))
 //                    ->required(),
                         Forms\Components\TextInput::make('description')
-                            ->label(__('app.description'))
+                            ->label(__('app.work_day.description'))
                             ->maxLength(255)
                             ->columnSpanFull(),
                     ])
@@ -131,11 +131,11 @@ class WorkDayResource extends Resource
                 Forms\Components\Group::make()
                     ->schema([
                         Forms\Components\TextInput::make('daily_cost')
-                            ->label(__('app.daily_cost'))
+                            ->label(__('app.work_day.daily_cost'))
                             ->prefix('€')
                             ->numeric(),
                         Forms\Components\TextInput::make('daily_allowance')
-                            ->label(__('app.daily_allowance'))
+                            ->label(__('app.work_day.daily_allowance'))
                             ->prefix('€')
                             ->numeric()
 //                            ->hidden(
@@ -161,7 +161,7 @@ class WorkDayResource extends Resource
 //                    ->label(__('app.extra_cost_description'))
 //                    ->columnSpanFull(),
                 Forms\Components\Toggle::make('calculate_extra_time_cost')
-                    ->label(__('app.calculate_extra_time_cost'))
+                    ->label(__('app.work_day.calculate_extra_time_cost'))
                     ->default(false),
             ]);
     }

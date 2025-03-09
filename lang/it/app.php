@@ -40,6 +40,8 @@ return [
         'multiple' => 'Giornate lavorative',
         'date' => 'Data',
         'worksite' => 'Cantiere',
+        'type' => 'Tipo',
+        'all_worksites' => 'Tutti i cantieri',
         'daily_cost' => 'Costo giornaliero',
         'total_hours' => 'Ore totali',
         'extra_time' => 'Ore extra',
