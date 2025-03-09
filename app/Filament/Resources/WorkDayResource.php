@@ -24,9 +24,12 @@ class WorkDayResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-briefcase';
 
-    protected static ?string $navigationGroup = 'Work';
-
     //protected static string | array $routeMiddleware = RegisteredDatabaseHandlerMiddleware::class;
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('app.navigation.work');
+    }
 
     public static function getLabel(): ?string
     {

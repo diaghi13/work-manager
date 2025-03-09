@@ -114,6 +114,10 @@ return [
         'incoming' => 'In arrivo',
     ],
 
+    'navigation' => [
+        'work' => 'Lavoro'
+    ],
+
     'general' => 'Generale',
     'address' => 'Indirizzo',
     'payment_conditions' => 'Condizioni di pagamento',

@@ -5,6 +5,7 @@ namespace App\Filament\Resources\WorkDayResource\RelationManagers;
 use App\Models\Enums\OutgoingTypeEnum;
 use App\Models\Outgoing;
 use App\Models\WorkDay;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -31,7 +32,10 @@ class OutgoingsRelationManager extends RelationManager
                 Forms\Components\FileUpload::make('attachments')
                     ->multiple()
                     ->disk('local')
-                    ->directory(fn(Outgoing $record) => "outgoings/{$record->id}")
+                    ->directory(function (Outgoing $record) {
+                        $userId = Filament::auth()->user()->id;
+                        return "{$userId}/outgoings/{$record->id}";
+                    })
                     ->reorderable()
                     ->downloadable()
                     ->previewable()

@@ -30,7 +30,10 @@ class WorksiteResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-map-pin';
 
-    protected static ?string $navigationGroup = 'Work';
+    public static function getNavigationGroup(): ?string
+    {
+        return __('app.navigation.work');
+    }
 
     public static function getLabel(): ?string
     {

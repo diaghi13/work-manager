@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\MoneyCast;
 use App\Models\Enums\OutgoingTypeEnum;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
@@ -21,14 +22,14 @@ class Outgoing extends Model
         'type' => OutgoingTypeEnum::class,
         'attachments' => 'array',
         'original_filenames' => 'array',
+        'amount' => MoneyCast::class,
     ];
 
-    protected function amount(): Attribute
+    protected static function boot()
     {
-        return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
-        );
+        parent::boot();
+
+        self::observe(\App\Observers\OutgoingObserver::class);
     }
 
     public function work_day()
@@ -36,8 +37,8 @@ class Outgoing extends Model
         return $this->belongsTo(WorkDay::class);
     }
 
-    public function attachments()
-    {
-        return $this->morphMany(UploadedFile::class, 'entitable');
-    }
+//    public function attachments()
+//    {
+//        return $this->morphMany(UploadedFile::class, 'entitable');
+//    }
 }
