@@ -19,7 +19,7 @@ Route::middleware([
 
         Route::post('/end-workday', function (Request $request) {
             $worksite = Worksite::find($request->input('worksite'));
-            $date = \Illuminate\Support\Carbon::parse($request->input('date'))->toDateString();
+            $date = \Illuminate\Support\Carbon::parse($request->input('startTime'))->toDateString();
 
             $startDateTime = \Illuminate\Support\Carbon::parse($request->input('startTime'));
             $endDateTime = \Illuminate\Support\Carbon::parse($request->input('endTime'));
