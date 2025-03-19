@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\App\Resources;
 
 use App\Filament\Resources\OutgoingResource\Pages;
 use App\Filament\Resources\OutgoingResource\RelationManagers;
@@ -12,8 +12,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class OutgoingResource extends Resource
 {
@@ -32,8 +30,8 @@ class OutgoingResource extends Resource
                     ->numeric(),
                 Forms\Components\Textarea::make('description')
                     ->columnSpanFull(),
-                Forms\Components\Select::make('work_day_id')
-                    ->options(fn () => WorkDay::all()->pluck('start_date_time', 'id'))
+                Forms\Components\Select::make('work_day')
+                    ->options(fn () => WorkDay::all()->pluck('date', 'id'))
                     ->required(),
             ]);
     }
@@ -42,12 +40,19 @@ class OutgoingResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('work_day.date')
+                    ->label('Date')
+                    ->date('d/m/Y')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('type'),
                 Tables\Columns\TextColumn::make('amount')
-                    ->numeric()
+                    ->money('EUR')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('work_day_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('work_day.worksite.name')
+                    ->label('Worksite')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('work_day.description')
+                    ->label('Work day description')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -58,16 +63,14 @@ class OutgoingResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('work_day.date', 'desc')
+            ->defaultSort('type')
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
             ]);
     }
 
@@ -81,9 +84,10 @@ class OutgoingResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListOutgoings::route('/'),
-            'create' => Pages\CreateOutgoing::route('/create'),
-            'edit' => Pages\EditOutgoing::route('/{record}/edit'),
+            'index' => \App\Filament\OutgoingResource\Pages\ListOutgoings::route('/'),
+            'create' => \App\Filament\OutgoingResource\Pages\CreateOutgoing::route('/create'),
+            'view' => \App\Filament\OutgoingResource\Pages\ViewOutgoing::route('/{record}'),
+            'edit' => \App\Filament\OutgoingResource\Pages\EditOutgoing::route('/{record}/edit'),
         ];
     }
 }
