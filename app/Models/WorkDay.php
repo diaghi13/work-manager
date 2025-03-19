@@ -171,7 +171,8 @@ class WorkDay extends Model
             $outgoingsAmount = $this->outgoings
                 ->filter(function ($outgoing) {
                     return $outgoing->type === OutgoingTypeEnum::MEAL
-                        || $outgoing->type === OutgoingTypeEnum::OVERNIGHT;
+                        || $outgoing->type === OutgoingTypeEnum::OVERNIGHT
+                        || $outgoing->type === OutgoingTypeEnum::TRAVEL;
                 })
                 ->sum('amount');
 
