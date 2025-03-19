@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\OutgoingResource\Pages;
+namespace App\Filament\Resources\OutgoingResource\Pages;
 
-use App\Filament\App\Resources\OutgoingResource;
+use App\Filament\Resources\OutgoingResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\OutgoingResource\Pages;
 
 use App\Filament\Resources\OutgoingResource;
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 

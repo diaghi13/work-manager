@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\App\Resources;
+namespace App\Filament\Resources;
 
 use App\Filament\Resources\OutgoingResource\Pages;
 use App\Filament\Resources\OutgoingResource\RelationManagers;
@@ -84,10 +84,10 @@ class OutgoingResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => \App\Filament\OutgoingResource\Pages\ListOutgoings::route('/'),
-            'create' => \App\Filament\OutgoingResource\Pages\CreateOutgoing::route('/create'),
-            'view' => \App\Filament\OutgoingResource\Pages\ViewOutgoing::route('/{record}'),
-            'edit' => \App\Filament\OutgoingResource\Pages\EditOutgoing::route('/{record}/edit'),
+            'index' => Pages\ListOutgoings::route('/'),
+            'create' => Pages\CreateOutgoing::route('/create'),
+            'view' => Pages\ViewOutgoing::route('/{record}'),
+            'edit' => Pages\EditOutgoing::route('/{record}/edit'),
         ];
     }
 }
