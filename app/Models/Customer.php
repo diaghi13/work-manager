@@ -26,4 +26,9 @@ class Customer extends Model
     {
         return $this->hasMany(Worksite::class);
     }
+
+    public function documents()
+    {
+        return $this->hasMany(Document::class);
+    }
 }

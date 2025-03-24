@@ -15,7 +15,7 @@ Route::middleware([
     ->group(function () {
         Route::get('/worksites', function () {
             return Worksite::all();
-        });
+        })->name('api.worksites');
 
         Route::post('/end-workday', function (Request $request) {
             $worksite = Worksite::find($request->input('worksite'));

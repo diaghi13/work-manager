@@ -2,11 +2,14 @@
 
 namespace App\Providers;
 
-use App\Http\Middleware\RegisteredDatabaseHandlerMiddleware;
+use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,9 +33,12 @@ class AppServiceProvider extends ServiceProvider
         if(config('app.env') === 'production') {
             URL::forceScheme(request()->server->set('HTTPS', request()->header('X-Forwarded-Proto', 'https') == 'https' ? 'on' : 'off'));
         }
+//      This is to add
+//        Gate::before(function (User $user, string $ability) {
+//            return $user->isSuperAdmin() ? true: null;
+//        });
 
-        Livewire::addPersistentMiddleware([
-            RegisteredDatabaseHandlerMiddleware::class
-        ]);
+        //Gate::policy(Role::class, RolePolicy::class);
+        //Gate::policy(Permission::class, PermissionPolicy::class);
     }
 }

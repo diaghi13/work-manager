@@ -21,6 +21,7 @@ Route::get('/', function () {
 //        ->where('status', '!=', 'draft')
 //        ->groupBy('month', 'year')
 //        ->dd();
+    //auth()->user()->roles()->sync([1]);
 
     return view('welcome');
 });

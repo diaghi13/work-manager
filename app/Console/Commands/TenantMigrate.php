@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Tenant;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -40,11 +41,10 @@ class TenantMigrate extends Command
             return 1;
         }
 
-        config()->set('database.connections.mysql.database', $database);
-        DB::purge('mysql');
+        Tenant::switch(false, $database);
 
         $options = [
-            '--database' => 'mysql',
+            '--database' => 'dynamic',
             '--path' => 'database/migrations/tenant',
             '--force' => $force,
         ];

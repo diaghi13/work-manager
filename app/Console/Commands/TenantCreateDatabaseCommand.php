@@ -38,16 +38,18 @@ class TenantCreateDatabaseCommand extends Command
 
         $this->info("Creating database: {$database}");
 
-        $charset = config("database.connections.mysql.charset",'utf8mb4');
+        $charset = config("database.connections.dynamic.charset",'utf8mb4');
 
-        $collation = config("database.connections.mysql.collation",'utf8mb4_unicode_ci');
+        $collation = config("database.connections.dynamic.collation",'utf8mb4_unicode_ci');
 
-        config(["database.connections.mysql.database" => null]);
+        config(["database.connections.dynamic.database" => null]);
 
-        $query = "CREATE DATABASE IF NOT EXISTS $schemaName CHARACTER SET $charset COLLATE $collation;";
+        $query = "CREATE DATABASE IF NOT EXISTS `$schemaName` CHARACTER SET $charset COLLATE $collation;";
 
         DB::statement($query);
 
         $this->info("Database created: {$database}");
+
+        return 0;
     }
 }

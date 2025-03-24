@@ -37,11 +37,13 @@ class TenantSeedCommand extends Command
             return 1;
         }
 
-        config()->set('database.connections.mysql.database', $database);
-        DB::purge('mysql');
+        config()->set('database.connections.dynamic.database', $database);
+
+        DB::setDefaultConnection('dynamic');
+        DB::reconnect('dynamic');
 
         $options = [
-            '--database' => 'mysql',
+            '--database' => 'dynamic',
             '--force' => $force,
         ];
 
