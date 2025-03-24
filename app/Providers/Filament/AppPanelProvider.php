@@ -71,7 +71,7 @@ class AppPanelProvider extends PanelProvider
             ])
             ->login()
             ->registration(CustomRegister::class)
-            ->profile(EditProfile::class)
-            ->renderHook(PanelsRenderHook::SIDEBAR_NAV_START, fn(): View => \view('components.tenant-switcher'));
+            ->profile(EditProfile::class);
+            //->renderHook(PanelsRenderHook::SIDEBAR_NAV_START, fn(): View => \view('components.tenant-switcher'));
     }
 }
