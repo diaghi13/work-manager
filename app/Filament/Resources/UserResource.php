@@ -126,8 +126,9 @@ class UserResource extends Resource
                             ->action(function (User $record, TenantService $service) {
                                 $tenant = $service->create();
 
-                                DB::setDefaultConnection('mysql');
-                                DB::reconnect('mysql');
+                                if (config('tenancy.database_sync')) {
+                                    Tenant::switch(root: true);
+                                }
 
                                 $record->tenants()->attach($tenant, [
                                     'selected' => true,
@@ -148,7 +149,7 @@ class UserResource extends Resource
                                 TextEntry::make('id')
                                     ->label('Database name'),
                             ])
-                            //->contained(false),
+                        //->contained(false),
                     ])
                         ->columnSpanFull(),
                 ]),
