@@ -9,7 +9,7 @@ return [
      * synced or in queue
      * Maybe you want to change this to false in production
      */
-    'database_sync' => true,
+    'database_sync' => false,
 
     /*
      * Seed tenant database when tenant is created
