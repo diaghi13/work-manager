@@ -2,11 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Exceptions\Tenant\TenantDatabaseNotProvidedException;
+use App\Models\Tenant;
 use Closure;
-use Filament\Facades\Filament;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
 
 class RegisteredDatabaseHandlerMiddleware
@@ -14,24 +14,41 @@ class RegisteredDatabaseHandlerMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param Closure(Request): (Response) $next
+     * @throws TenantDatabaseNotProvidedException
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $user = Filament::auth()->getUser();
+        if ($request->method() !== 'OPTIONS') {
+            //return $next($request);
+        }
 
-        if (!$user || !$user->database) {
+        if (!auth()->check()) {
             return $next($request);
         }
 
-        if ($request->getRequestUri() == '/admin/logout') {
+//        if ($request->getRequestUri() == '/admin/logout') {
+//            return $next($request);
+//        }
+
+        $database = $this->findDatabase();
+
+        if (!$database) {
             return $next($request);
         }
 
-        config()->set('database.connections.mysql.database', $user->database);
+//        config()->set('database.connections.mysql.database', $user->database);
+//
+//        DB::purge('mysql');
 
-        DB::purge('mysql');
+        Tenant::switch(false, $database);
 
         return $next($request);
+    }
+
+    public function findDatabase()
+    {
+        $user = auth()->getUser();
+        return $user->tenants()->wherePivot('selected', true)->first()->id;
     }
 }
