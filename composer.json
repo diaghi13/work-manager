@@ -7,18 +7,15 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "althinect/filament-spatie-roles-permissions": "^2.3",
         "ariaieboy/filament-currency": "^1.12",
         "awcodes/filament-table-repeater": "^3.1",
-        "bezhansalleh/filament-shield": "^3.3",
         "brick/money": "^0.10.0",
         "filament/filament": "^3.2",
         "hydrat/filament-table-layout-toggle": "^2.0",
         "laravel/breeze": "^2.3",
         "laravel/framework": "^12.3.0",
         "laravel/sanctum": "^4.0",
-        "laravel/tinker": "^2.9",
-        "shanerbaner82/panel-roles": "^0.0.3"
+        "laravel/tinker": "^2.9"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.14",

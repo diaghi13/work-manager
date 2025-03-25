@@ -5,7 +5,6 @@ namespace App\Providers\Filament;
 //use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
 use App\CustomRegister;
 use App\Filament\App\Pages\Auth\EditProfile;
-//use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -65,13 +64,12 @@ class AdminPanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop()
             ->spa()
             ->plugins([
-                //FilamentShieldPlugin::make(),
                 new TableLayoutTogglePlugin,
-                //FilamentSpatieRolesPermissionsPlugin::make(),
-                //PanelRoles::make()
-                //    ->roleToAssign('Admin')
-                //    ->restrictedRoles(['super_admin']),
-                //\BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
+//                FilamentSpatieRolesPermissionsPlugin::make(),
+//                PanelRoles::make()
+//                    ->roleToAssign('Admin')
+//                    ->restrictedRoles(['super_admin']),
+//                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
             ])
             ->registration(CustomRegister::class)
             ->profile(EditProfile::class);
