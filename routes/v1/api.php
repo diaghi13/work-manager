@@ -9,12 +9,15 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::middleware([
-    'auth:sanctum',
+    //'auth:sanctum',
     \App\Http\Middleware\RegisteredDatabaseHandlerMiddleware::class
 ])
     ->group(function () {
         Route::get('/worksites', function () {
-            return Worksite::all();
+            return Worksite::query()
+                ->where('start_date', '<', now()->toDateString())
+                ->where('end_date', '>=', now()->toDateString())
+                ->get();
         })->name('api.worksites');
 
         Route::post('/end-workday', function (Request $request) {

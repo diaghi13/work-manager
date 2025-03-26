@@ -38,3 +38,5 @@ Route::get( '/db-string', function () {
 
     return $databaseName;
 });
+
+require __DIR__.'/auth.php';

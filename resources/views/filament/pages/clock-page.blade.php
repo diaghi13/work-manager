@@ -200,7 +200,12 @@
         }
 
         // Fetch worksite data from the server and populate the select field
-        fetch('/api/v1/worksites')
+        fetch('/api/v1/worksites', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
             .then(response => response.json())
             .then(data => {
                 data.forEach(worksite => {
