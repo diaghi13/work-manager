@@ -15,8 +15,9 @@ Route::middleware([
     ->group(function () {
         Route::get('/worksites', function () {
             return Worksite::query()
-                ->where('start_date', '<=', now()->toDateString())
-                ->where('end_date', '>=', now()->toDateString())
+                //->where('start_date', '<=', now()->toDateString())
+                //->where('end_date', '>=', now()->toDateString())
+                ->where('status', \App\Models\Enums\WorksiteStatusEnum::IN_PROGRESS)
                 ->get();
         })->name('api.worksites');
 

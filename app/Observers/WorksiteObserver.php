@@ -15,7 +15,7 @@ class WorksiteObserver
                 $worksite->update(['status' => WorksiteStatusEnum::IN_PROGRESS]);
             }
 
-            if (Carbon::now()->greaterThan($worksite->start_date) && Carbon::now()->greaterThan($worksite->end_date)) {
+            if (Carbon::now()->greaterThanOrEqualTo($worksite->start_date) && Carbon::now()->greaterThan($worksite->end_date)) {
                 $worksite->update(['status' => WorksiteStatusEnum::COMPLETED]);
             }
         }
