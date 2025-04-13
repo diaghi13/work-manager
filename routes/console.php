@@ -44,5 +44,5 @@ Artisan::command('inspire', function () {
 
 \Illuminate\Support\Facades\Schedule::command('worksites:update-status')
     ->description('Update the status of worksites based on their start and end dates')
-    ->everyMinute()
+    ->daily()
     ->timezone('Europe/Rome');
