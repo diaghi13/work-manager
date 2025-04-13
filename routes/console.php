@@ -10,9 +10,9 @@ Artisan::command('inspire', function () {
 function updateWorksiteStatus(mixed $tenant)
 {
     $worksites = \App\Models\Worksite::query()
-        ->where('status', '<>', \App\Models\Enums\WorksiteStatusEnum::ACCEPTED)
-        ->orWhere('status', '<>', \App\Models\Enums\WorksiteStatusEnum::IN_PROGRESS)
-        ->orWhere('status', '<>', \App\Models\Enums\WorksiteStatusEnum::ACTIVE)
+        ->where('status', \App\Models\Enums\WorksiteStatusEnum::ACCEPTED)
+        ->orWhere('status', \App\Models\Enums\WorksiteStatusEnum::IN_PROGRESS)
+        ->orWhere('status', \App\Models\Enums\WorksiteStatusEnum::ACTIVE)
         //->where('end_date', '<=', now()->toDateString())
         ->get();
 
