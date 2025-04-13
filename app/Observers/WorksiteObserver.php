@@ -10,21 +10,21 @@ class WorksiteObserver
 {
     public function retrieved(Worksite $worksite): void
     {
-        if ($worksite->status === WorksiteStatusEnum::ACCEPTED) {
-            if (Carbon::now()->betweenIncluded($worksite->start_date, $worksite->end_date)) {
-                $worksite->update(['status' => WorksiteStatusEnum::IN_PROGRESS]);
-            }
-
-            if (Carbon::now()->greaterThanOrEqualTo($worksite->start_date) && Carbon::now()->greaterThan($worksite->end_date)) {
-                $worksite->update(['status' => WorksiteStatusEnum::COMPLETED]);
-            }
-        }
-
-        if ($worksite->status === WorksiteStatusEnum::IN_PROGRESS) {
-            if (Carbon::now()->greaterThan($worksite->end_date)) {
-                $worksite->update(['status' => WorksiteStatusEnum::COMPLETED]);
-            }
-        }
+//        if ($worksite->status === WorksiteStatusEnum::ACCEPTED) {
+//            if (Carbon::now()->betweenIncluded($worksite->start_date, $worksite->end_date)) {
+//                $worksite->update(['status' => WorksiteStatusEnum::IN_PROGRESS]);
+//            }
+//
+//            if (Carbon::now()->greaterThanOrEqualTo($worksite->start_date) && Carbon::now()->greaterThan($worksite->end_date)) {
+//                $worksite->update(['status' => WorksiteStatusEnum::COMPLETED]);
+//            }
+//        }
+//
+//        if ($worksite->status === WorksiteStatusEnum::IN_PROGRESS) {
+//            if (Carbon::now()->greaterThan($worksite->end_date)) {
+//                $worksite->update(['status' => WorksiteStatusEnum::COMPLETED]);
+//            }
+//        }
     }
 
     /**
