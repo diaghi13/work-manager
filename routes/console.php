@@ -65,6 +65,6 @@ function updateWorksiteStatus(mixed $tenant)
 
     \Illuminate\Support\Facades\Log::info('Worksite status update completed.');
 })
-    ->everyMinute()
+    ->daily()
     ->timezone('Europe/Rome')
     ->name('update worksite status');
