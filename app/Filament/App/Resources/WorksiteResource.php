@@ -21,6 +21,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Hydrat\TableLayoutToggle\Concerns\HasToggleableTable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 
 class WorksiteResource extends Resource
 {
@@ -179,13 +180,67 @@ class WorksiteResource extends Resource
             )
             ->defaultSort('start_date', 'desc')
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('customer')
+                    ->label(__('app.worksite.customer'))
+                    ->relationship('customer', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->multiple()
+                    ->placeholder(__('app.all')),
+                Tables\Filters\SelectFilter::make('status')
+                    ->label(__('app.worksite.status'))
+                    ->options(WorksiteStatusEnum::class)
+                    ->multiple()
+                    ->placeholder(__('app.all')),
+                Tables\Filters\Filter::make('start_date')
+                    ->label(__('app.worksite.start_date'))
+                    ->form([
+                        Forms\Components\DatePicker::make('start_date')
+                            ->label(__('app.worksite.start_date'))
+                            ->placeholder(__('app.worksite.start_date')),
+                        Forms\Components\DatePicker::make('end_date')
+                            ->label(__('app.worksite.end_date'))
+                            ->placeholder(__('app.worksite.end_date')),
+                    ])
+                    ->query(function (Builder $query, array $data) {
+                        switch (true) {
+                            case $data['start_date'] && $data['end_date']:
+                                $query->whereBetween('start_date', [$data['start_date'], $data['end_date']]);
+                                break;
+                            case $data['start_date'] && !$data['end_date']:
+                                $query->where('start_date', '>=', $data['start_date']);
+                                break;
+                            case !$data['start_date'] && $data['end_date']:
+                                $query->where('start_date', '<=', $data['end_date']);
+                                break;
+                            case !$data['start_date'] && !$data['end_date']:
+                                return;
+                        }
+                    })
+                ->indicateUsing(function (array $data): array {
+                    $indicators = [];
+
+                    if ($data['start_date'] && $data['end_date']) {
+                        $indicators['start_date'] = __('app.worksite.start_date') . ': ' . Carbon::make($data['start_date'])->format('d/m/Y') . ' - ' . Carbon::make($data['end_date'])->format('d/m/Y');
+                    } elseif ($data['start_date']) {
+                        $indicators['start_date'] = __('app.worksite.start_date') . ': ' . Carbon::make($data['start_date'])->format('d/m/Y');
+                    } elseif ($data['end_date']) {
+                        $indicators['end_date'] = __('app.worksite.end_date') . ': ' . Carbon::make($data['end_date'])->format('d/m/Y');
+                    }
+
+                    return $indicators;
+                }),
+                Tables\Filters\SelectFilter::make('type')
+                    ->label(__('app.worksite.job_type'))
+                    ->options(WorksiteTypeEnum::class)
+                    ->multiple()
+                    ->placeholder(__('app.all')),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 ...(DeviceHelper::isMobile() ? [] : [
+                    Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
-                    Tables\Actions\EditAction::make()
                 ]),
             ])
             ->bulkActions([
@@ -285,6 +340,8 @@ class WorksiteResource extends Resource
     {
         return [
             \App\Filament\App\Resources\WorksiteResource\RelationManagers\WorkDaysRelationManager::class,
+            \App\Filament\App\Resources\WorksiteResource\RelationManagers\DocumentsRelationManager::class,
+            \App\Filament\App\Resources\WorksiteResource\RelationManagers\OutgoingsRelationManager::class,
         ];
     }
 
@@ -303,6 +360,7 @@ class WorksiteResource extends Resource
         return [
             Tables\Columns\TextColumn::make('name')
                 ->label(__('app.worksite.name'))
+                ->sortable()
                 ->searchable(),
             Tables\Columns\TextColumn::make('type')
                 ->label(__('app.worksite.job_type'))
