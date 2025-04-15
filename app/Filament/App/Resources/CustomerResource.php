@@ -78,13 +78,18 @@ class CustomerResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('name')
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label(__('app.customers.name')),
+                    ->label(__('app.customers.name'))
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('vat_code')
-                    ->label(__('app.customers.vat_code')),
+                    ->label(__('app.customers.vat_code'))
+                ->searchable(),
                 Tables\Columns\TextColumn::make('vat_id')
-                    ->label(__('app.customers.vat_id')),
+                    ->label(__('app.customers.vat_id'))
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('street')
                     ->label(__('app.customers.street')),
                 Tables\Columns\TextColumn::make('number')
