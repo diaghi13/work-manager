@@ -61,6 +61,18 @@ class Worksite extends Model
         return $this->hasMany(WorkDay::class);
     }
 
+    public function outgoings()
+    {
+        return $this->hasManyThrough(
+            Outgoing::class,
+            WorkDay::class,
+            'worksite_id',
+            'work_day_id',
+            'id',
+            'id'
+        );
+    }
+
     public function documents()
     {
         return $this->belongsToMany(Document::class);
