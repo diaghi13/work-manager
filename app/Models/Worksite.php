@@ -44,6 +44,10 @@ class Worksite extends Model
         'daily_allowance' => MoneyCast::class,
     ];
 
+    protected $appends = [
+        'payment_status'
+    ];
+
     protected static function boot()
     {
         parent::boot();
@@ -75,7 +79,9 @@ class Worksite extends Model
 
     public function documents()
     {
-        return $this->belongsToMany(Document::class);
+        return $this->belongsToMany(Document::class)
+            ->using(DocumentWorksite::class)
+            ->withPivot('worksite_payment_status');
     }
 
     public function not_payed()
@@ -114,6 +120,20 @@ class Worksite extends Model
         return $remainingAllowance > 0
             ? $remainingAllowance
             : null;
+    }
+
+    public function document_worksites()
+    {
+        return $this->hasMany(DocumentWorksite::class);
+    }
+
+    public function getPaymentStatusAttribute()
+    {
+        return $this->hasOne(DocumentWorksite::class)
+            ->latestOfMany()
+            ->get()
+            ->first()
+            ->worksite_payment_status;
     }
 
 //    public function getTotalExtraCostAttribute()

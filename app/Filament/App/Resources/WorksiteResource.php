@@ -6,6 +6,7 @@ use App\Filament\Resources\WorksiteResource\Pages;
 use App\Filament\Resources\WorksiteResource\RelationManagers;
 use App\Helpers\DeviceHelper;
 use App\Models\Customer;
+use App\Models\Enums\WorksitePaymentStatusEnum;
 use App\Models\Enums\WorksiteStatusEnum;
 use App\Models\Enums\WorksiteTypeEnum;
 use App\Models\Worksite;
@@ -170,7 +171,8 @@ class WorksiteResource extends Resource
                     'work_days' => [
                         'worksite',
                         'outgoings',
-                    ]
+                    ],
+                    'documents'
                 ]);
             })
             ->columns(
@@ -217,19 +219,19 @@ class WorksiteResource extends Resource
                                 return;
                         }
                     })
-                ->indicateUsing(function (array $data): array {
-                    $indicators = [];
+                    ->indicateUsing(function (array $data): array {
+                        $indicators = [];
 
-                    if ($data['start_date'] && $data['end_date']) {
-                        $indicators['start_date'] = __('app.worksite.start_date') . ': ' . Carbon::make($data['start_date'])->format('d/m/Y') . ' - ' . Carbon::make($data['end_date'])->format('d/m/Y');
-                    } elseif ($data['start_date']) {
-                        $indicators['start_date'] = __('app.worksite.start_date') . ': ' . Carbon::make($data['start_date'])->format('d/m/Y');
-                    } elseif ($data['end_date']) {
-                        $indicators['end_date'] = __('app.worksite.end_date') . ': ' . Carbon::make($data['end_date'])->format('d/m/Y');
-                    }
+                        if ($data['start_date'] && $data['end_date']) {
+                            $indicators['start_date'] = __('app.worksite.start_date') . ': ' . Carbon::make($data['start_date'])->format('d/m/Y') . ' - ' . Carbon::make($data['end_date'])->format('d/m/Y');
+                        } elseif ($data['start_date']) {
+                            $indicators['start_date'] = __('app.worksite.start_date') . ': ' . Carbon::make($data['start_date'])->format('d/m/Y');
+                        } elseif ($data['end_date']) {
+                            $indicators['end_date'] = __('app.worksite.end_date') . ': ' . Carbon::make($data['end_date'])->format('d/m/Y');
+                        }
 
-                    return $indicators;
-                }),
+                        return $indicators;
+                    }),
                 Tables\Filters\SelectFilter::make('type')
                     ->label(__('app.worksite.job_type'))
                     ->options(WorksiteTypeEnum::class)
@@ -407,9 +409,39 @@ class WorksiteResource extends Resource
                 ->sortable()
                 ->toggleable()
                 ->searchable(),
+            Tables\Columns\TextColumn::make('payment_status')
+                ->getStateUsing(fn(Worksite $record) =>
+                    $record->documents->first()?->pivot->worksite_payment_status ?? WorksitePaymentStatusEnum::NOT_PAID
+                )
+                ->badge()
+                ->color(fn(Worksite $worksite): string => match ($worksite->documents->first()?->pivot->worksite_payment_status ?? WorksitePaymentStatusEnum::NOT_PAID) {
+                    WorksitePaymentStatusEnum::PAID => 'success',
+                    WorksitePaymentStatusEnum::PENDING => 'primary',
+                    WorksitePaymentStatusEnum::NOT_PAID => 'danger',
+                    WorksitePaymentStatusEnum::PARTIALLY_PAID => 'warning',
+                    default => 'info',
+                }),
+//                ->badge()
+//                ->color(fn(Worksite $worksite): string => match ($worksite->payment_status) {
+//                    WorksitePaymentStatusEnum::PAID => 'success',
+//                    WorksitePaymentStatusEnum::PENDING => 'primary',
+//                    WorksitePaymentStatusEnum::NOT_PAID => 'danger',
+//                    WorksitePaymentStatusEnum::PARTIALLY_PAID => 'warning',
+//                    default => 'info',
+//                }),
             Tables\Columns\TextColumn::make('total_remuneration')
                 ->money('EUR')
                 ->sortable(),
+//            ->summarize(
+//                Tables\Columns\Summarizers\Summarizer::make()
+//                    ->using(
+//                        fn(Builder $query): string =>
+//                            $query->sum('total_remuneration')
+//                                ? $query->sum('total_remuneration')
+//                                : '0.00'
+//                    )
+//                    ->label(__('app.total'))
+//            ),
             Tables\Columns\TextColumn::make('total_extra_cost')
                 ->money('EUR')
                 ->sortable(),
