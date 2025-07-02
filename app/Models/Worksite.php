@@ -133,7 +133,7 @@ class Worksite extends Model
             ->latestOfMany()
             ->get()
             ->first()
-            ->worksite_payment_status;
+            ?->worksite_payment_status;
     }
 
 //    public function getTotalExtraCostAttribute()
