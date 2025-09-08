@@ -60,7 +60,7 @@ class AppPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-                //RegisteredDatabaseHandlerMiddleware::class,
+                RegisteredDatabaseHandlerMiddleware::class,
             ], isPersistent: true)
 //            ->routes(function ($routes) {
 //                $routes->prefix('app');
