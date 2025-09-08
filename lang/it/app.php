@@ -121,4 +121,19 @@ return [
     'general' => 'Generale',
     'address' => 'Indirizzo',
     'payment_conditions' => 'Condizioni di pagamento',
+
+    'full_calendar' => [
+        'today' => 'Oggi',
+        'month' => 'Mese',
+        'week' => 'Settimana',
+        'day' => 'Giorno',
+        'list' => 'Elenco',
+        'all_worksites' => 'Tutti i cantieri',
+        'worksites' => 'Cantieri',
+        'work_days' => 'Giornate lavorative',
+        'type' => 'Tipo',
+        'customer' => 'Cliente',
+        'status' => 'Stato',
+        'show_more' => '+ altri :count',
+    ]
 ];
