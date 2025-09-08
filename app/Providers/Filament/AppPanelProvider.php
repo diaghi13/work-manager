@@ -24,6 +24,8 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Illuminate\View\View;
+use Saade\FilamentFullCalendar\FilamentFullCalendarPlugin;
+use Saade\FilamentFullCalendar\Widgets\FullCalendarWidget;
 
 class AppPanelProvider extends PanelProvider
 {
@@ -58,7 +60,7 @@ class AppPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-                RegisteredDatabaseHandlerMiddleware::class,
+                //RegisteredDatabaseHandlerMiddleware::class,
             ], isPersistent: true)
 //            ->routes(function ($routes) {
 //                $routes->prefix('app');
@@ -68,6 +70,38 @@ class AppPanelProvider extends PanelProvider
             ->spa()
             ->plugins([
                 new TableLayoutTogglePlugin,
+                FilamentFullCalendarPlugin::make()
+                    ->timezone('Europe/Rome')
+                    ->config([
+                    'defaultView' => 'dayGridMonth',
+                    'headerToolbar' => [
+                        'left' => 'prev,next today',
+                        'center' => 'title',
+                        'right' => 'dayGridMonth,timeGridWeek,timeGridDay',
+                    ],
+                    'views' => [
+                        'dayGridMonth' => [
+                            'buttonText' => __('app.full_calendar.month'),
+                            'titleFormat' => ['year', 'month'],
+                        ],
+                        'timeGridWeek' => [
+                            'buttonText' => __('app.full_calendar.week'),
+                            'titleFormat' => ['year', 'month', 'day'],
+                        ],
+                        'timeGridDay' => [
+                            'buttonText' => __('app.full_calendar.day'),
+                            'titleFormat' => ['year', 'month', 'day'],
+                        ],
+                    ],
+                    'firstDay' => 1,
+                    'locale' => app()->getLocale(),
+                    'navLinks' => true,
+                    'selectable' => true,
+                    'selectMirror' => true,
+                    'dayMaxEvents' => true,
+                    'weekNumbers' => false,
+                    'weekNumberCalculation' => 'ISO',
+                ]),
             ])
             ->login()
             ->registration(CustomRegister::class)
