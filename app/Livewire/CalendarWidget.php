@@ -23,7 +23,7 @@ class CalendarWidget extends FullCalendarWidget
             'headerToolbar' => [
                 'left' => 'prev,next today',
                 'center' => 'title',
-                'right' => 'dayGridMonth,timeGridWeek,timeGridDay',
+                'right' => 'dayGridYear,dayGridMonth,timeGridWeek,timeGridDay',
             ],
             'views' => [
                 'dayGridMonth' => [
