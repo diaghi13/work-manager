@@ -72,40 +72,10 @@ class AppPanelProvider extends PanelProvider
                 new TableLayoutTogglePlugin,
                 FilamentFullCalendarPlugin::make()
                     ->timezone('Europe/Rome')
-                    ->config([
-                    'defaultView' => 'dayGridMonth',
-                    'headerToolbar' => [
-                        'left' => 'prev,next today',
-                        'center' => 'title',
-                        'right' => 'dayGridMonth,timeGridWeek,timeGridDay',
-                    ],
-                    'views' => [
-                        'dayGridMonth' => [
-                            'buttonText' => __('app.full_calendar.month'),
-                            'titleFormat' => ['year', 'month'],
-                        ],
-                        'timeGridWeek' => [
-                            'buttonText' => __('app.full_calendar.week'),
-                            'titleFormat' => ['year', 'month', 'day'],
-                        ],
-                        'timeGridDay' => [
-                            'buttonText' => __('app.full_calendar.day'),
-                            'titleFormat' => ['year', 'month', 'day'],
-                        ],
-                    ],
-                    'firstDay' => 1,
-                    'locale' => app()->getLocale(),
-                    'navLinks' => true,
-                    'selectable' => true,
-                    'selectMirror' => true,
-                    'dayMaxEvents' => true,
-                    'weekNumbers' => false,
-                    'weekNumberCalculation' => 'ISO',
-                ]),
             ])
             ->login()
             ->registration(CustomRegister::class)
             ->profile(EditProfile::class);
-            //->renderHook(PanelsRenderHook::SIDEBAR_NAV_START, fn(): View => \view('components.tenant-switcher'));
+        //->renderHook(PanelsRenderHook::SIDEBAR_NAV_START, fn(): View => \view('components.tenant-switcher'));
     }
 }
