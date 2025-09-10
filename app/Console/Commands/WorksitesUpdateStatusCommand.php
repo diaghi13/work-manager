@@ -69,25 +69,25 @@ function updateWorksiteStatus(mixed $tenant): void
     $worksites = \App\Models\Worksite::query()
         ->where('status', \App\Models\Enums\WorksiteStatusEnum::ACCEPTED)
         ->orWhere('status', \App\Models\Enums\WorksiteStatusEnum::IN_PROGRESS)
-        ->orWhere('status', \App\Models\Enums\WorksiteStatusEnum::ACTIVE)
         //->where('end_date', '<=', now()->toDateString())
         ->get();
 
     foreach ($worksites as $worksite) {
+        $originalStatus = $worksite->status;
 
-        switch ($worksite->status->value) {
-            case \App\Models\Enums\WorksiteStatusEnum::ACCEPTED->value:
-                if (now()->betweenIncluded($worksite->start_date, $worksite->end_date)) {
-                    $worksite->update(['status' => \App\Models\Enums\WorksiteStatusEnum::IN_PROGRESS]);
-                }
-                break;
+        if ($worksite->end_date && $worksite->end_date->isBefore(now()->toDateString())) {
+            $worksite->status = \App\Models\Enums\WorksiteStatusEnum::COMPLETED;
+        } elseif ($worksite->start_date && $worksite->start_date->isBefore(now()->toDateString())) {
+            $worksite->status = \App\Models\Enums\WorksiteStatusEnum::IN_PROGRESS;
+        } else {
+            $worksite->status = \App\Models\Enums\WorksiteStatusEnum::ACCEPTED;
+        }
 
-            case \App\Models\Enums\WorksiteStatusEnum::IN_PROGRESS->value
-                || \App\Models\Enums\WorksiteStatusEnum::ACTIVE->value:
-                if (now()->greaterThan($worksite->end_date)) {
-                    $worksite->update(['status' => \App\Models\Enums\WorksiteStatusEnum::COMPLETED]);
-                }
-                break;
+        if ($originalStatus !== $worksite->status) {
+            $worksite->save();
+            \Illuminate\Support\Facades\Log::info('Worksite ID ' . $worksite->id . ' status changed from ' . $originalStatus->value . ' to ' . $worksite->status->value);
+        } else {
+            \Illuminate\Support\Facades\Log::info('Worksite ID ' . $worksite->id . ' status remains ' . $worksite->status->value);
         }
     }
 }
